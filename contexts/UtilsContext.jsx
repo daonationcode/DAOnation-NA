@@ -8,7 +8,7 @@ import config from './json/config.json';
 import datafeeds from './json/datafeeds.json';
 import PriceFeedABI from '../contracts/artifacts/contracts/precompiles/PriceFeed.sol/AggregatorV3Interface.json';
 import BatchABI from '../contracts/artifacts/contracts/precompiles/Batch.sol/Batch.json';
-import PlanetDAO from '../contracts/deployments/moonbase/PlanetDAO.json';
+import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
 import Web3 from 'web3';
 import { ChainId } from '@biconomy/core-types';
 import SmartAccount from '@biconomy/smart-account';
@@ -122,7 +122,7 @@ export function UtilsProvider({ children }) {
     if (token == "DOT"){
 
       const { web3Enable } = require('@polkadot/extension-dapp');
-      await web3Enable('PlanetDAO');
+      await web3Enable('DAOnation');
       window.localStorage.setItem('loggedin', 'true');
       window.localStorage.setItem('login-type', 'polkadot');
       return;
@@ -186,12 +186,12 @@ export function UtilsProvider({ children }) {
       callData.push('0x');
 
       //Adding save information into smart contract
-      to.push(PlanetDAO.address);
+      to.push(DAOnation.address);
 
       let web3 = new Web3(window.ethereum);
-      const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
+      const DAOnationContract = new web3.eth.Contract(DAOnation.abi, DAOnation.address).methods;
 
-      let encodedCallData = PlanetDAOContract.add_donation(ideas_id, parsedAmount, Number(window.userid), feed1, feed2).encodeABI();
+      let encodedCallData = DAOnationContract.add_donation(ideas_id, parsedAmount, Number(window.userid), feed1, feed2).encodeABI();
 
       callData.push(encodedCallData);
 
@@ -224,11 +224,11 @@ export function UtilsProvider({ children }) {
       callData.push(encodedCallData2.data);
 
       //Adding save information into smart contract
-      to.push(PlanetDAO.address);
+      to.push(DAOnation.address);
 
       let web3 = new Web3(window.ethereum);
-      const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
-      let encodedCallData3 = PlanetDAOContract.add_donation(ideas_id, parsedAmount, Number(window.userid), feed1, feed2).encodeABI();
+      const DAOnationContract = new web3.eth.Contract(DAOnation.abi, DAOnation.address).methods;
+      let encodedCallData3 = DAOnationContract.add_donation(ideas_id, parsedAmount, Number(window.userid), feed1, feed2).encodeABI();
       callData.push(encodedCallData3);
 
       //Sending Batch Transaction
@@ -254,14 +254,14 @@ export function UtilsProvider({ children }) {
       callData.push('0x');
 
       //Adding save information into smart contract
-      to.push(PlanetDAO.address);
+      to.push(DAOnation.address);
 
       let web3 = new Web3(window.ethereum);
-      const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
+      const DAOnationContract = new web3.eth.Contract(DAOnation.abi, DAOnation.address).methods;
 
       console.log('DAO_ID', dao_id);
 
-      let encodedCallData = PlanetDAOContract.join_community(dao_id, Number(window.userid),new Date().toLocaleDateString(), feed).encodeABI();
+      let encodedCallData = DAOnationContract.join_community(dao_id, Number(window.userid),new Date().toLocaleDateString(), feed).encodeABI();
 
       callData.push(encodedCallData);
 
@@ -280,7 +280,7 @@ export function UtilsProvider({ children }) {
     let ConvictionVotingContract = new ethers.Contract(ConvictionAddr, ConvictionVoting.abi, targetSigner);
 
     let web3 = new Web3(window.ethereum);
-    const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
+    const DAOnationContract = new web3.eth.Contract(DAOnation.abi, DAOnation.address).methods;
 
     if (Number(window.ethereum.networkVersion) === 1287) {
       //If it is sending from Moonbase then it will not use Biconomy Batch Transactions
@@ -290,9 +290,9 @@ export function UtilsProvider({ children }) {
       let gasLimit = [];
 
       //Create Goal Ideas into smart contract
-      let encodedCallData = PlanetDAOContract.create_goal_ideas_vote(Number(Goalid), Number(id), Number(window.userid)).encodeABI();
+      let encodedCallData = DAOnationContract.create_goal_ideas_vote(Number(Goalid), Number(id), Number(window.userid)).encodeABI();
 
-      to.push(PlanetDAO.address);
+      to.push(DAOnation.address);
       callData.push(encodedCallData);
 
       //Conviction Vote
@@ -329,7 +329,7 @@ export function UtilsProvider({ children }) {
       } else if (voteType == 'abstain') {
         await window.sendTransaction(await ConvictionVotingContract.populateTransaction.voteSplitAbstain(Number(PollIndex), Number(AbstainInfo[0]), Number(AbstainInfo[1], Number(AbstainInfo[2]))));
       }
-      await window.sendTransaction(await PlanetDAOContract.populateTransaction.create_goal_ideas_vote(Number(Goalid), Number(id), Number(window.userid)));
+      await window.sendTransaction(await DAOnationContract.populateTransaction.create_goal_ideas_vote(Number(Goalid), Number(id), Number(window.userid)));
     }
   }
 

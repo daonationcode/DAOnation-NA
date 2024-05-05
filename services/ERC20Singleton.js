@@ -1,7 +1,7 @@
 
 import { ethers } from 'ethers';
 
-import erc20 from '../contracts/deployments/moonbase/PlanetDAO.json';
+import erc20 from '../contracts/deployments/moonbase/DAOnation.json';
 const sleep = milliseconds => {
 	return new Promise(resolve => setTimeout(resolve, milliseconds))
 }

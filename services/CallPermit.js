@@ -1,7 +1,7 @@
 
 import { ethers } from 'ethers';
 import { SignTypedDataVersion } from '@metamask/eth-sig-util';
-import PlanetDAO from '../contracts/deployments/moonbase/PlanetDAO.json';
+import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
 import CallPermitABI from '../contracts/artifacts/contracts/precompiles/CallPermit.sol/CallPermit.json';
 
 export default async function CallPermit(methodWithSignature) {
@@ -11,7 +11,7 @@ export default async function CallPermit(methodWithSignature) {
 
     const from = (await signer.getAddress())?.toString();
     let signature;
-    const to = PlanetDAO.address;
+    const to = DAOnation.address;
     const value = 0;
     const data = methodWithSignature.data;
 

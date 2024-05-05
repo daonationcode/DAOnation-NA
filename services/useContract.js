@@ -5,10 +5,9 @@ import Web3 from 'web3';
 import chains from "./json/chains.json"
 import IGPABI from "./json/IGPABI.json"
 import ERC20Singleton from './ERC20Singleton';
-import erc20 from '../contracts/deployments/moonbase/PlanetDAO.json';
 import { useUtilsContext } from '../contexts/UtilsContext';
 import HDWalletProvider from '@truffle/hdwallet-provider'
-import PlanetDAO from '../contracts/deployments/moonbase/PlanetDAO.json';
+import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
 import CallPermit from './CallPermit';
 let providerURL = 'https://rpc.api.moonbase.moonbeam.network';
 
@@ -54,7 +53,7 @@ export default function useContract() {
 						name: 'moonbase-alphanet'
 					});
 					let signer = provider;
-					const contract2 = new ethers.Contract(erc20.address, erc20.abi, signer)
+					const contract2 = new ethers.Contract(DAOnation.address, DAOnation.abi, signer)
 					contract.contract = contract2;
 					window.contract = contract2;
 					setContractInstance(contract);
@@ -103,7 +102,7 @@ export default function useContract() {
 
 
 		//Transaction 1
-		const tx1 = await HCcontract.populateTransaction.sendTransaction(domain_id, chainInfo.ICA, erc20.address, 0, encoded)
+		const tx1 = await HCcontract.populateTransaction.sendTransaction(domain_id, chainInfo.ICA, DAOnation.address, 0, encoded)
 		const tx1Full = {
 			to: chainInfo.HCA, // destination smart contract address
 			data: tx1.data
@@ -233,10 +232,10 @@ export async function saveReadMessage(messageid, ideasid, msg_type) {
 
 	const myAccount = web3.eth.accounts.privateKeyToAccount(myPrivateKeyHex);
 
-	const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods
+	const DAOnationContract = new web3.eth.Contract(DAOnation.abi, DAOnation.address).methods
 
-	window.PlanetDAOContract = PlanetDAOContract;
-	await PlanetDAOContract.sendReadMsg(messageid, ideasid, Number(window.userid), msg_type).send({ from: myAccount.address });
+	window.DAOnationContract = DAOnationContract;
+	await DAOnationContract.sendReadMsg(messageid, ideasid, Number(window.userid), msg_type).send({ from: myAccount.address });
 
 	console.log("read message ->", messageid)
 

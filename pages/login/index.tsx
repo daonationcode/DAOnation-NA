@@ -95,7 +95,7 @@ export default function Login() {
       return;
     }
     const { web3Enable } = require('@polkadot/extension-dapp');
-    await web3Enable('PlanetDAO');
+    await web3Enable('DAOnation');
     window.localStorage.setItem('loggedin', 'true');
     window.localStorage.setItem('login-type', 'polkadot');
     setIsConnected(true);
