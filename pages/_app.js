@@ -5,14 +5,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { UtilsProvider } from '../contexts/UtilsContext';
 import { PolkadotProvider } from '../contexts/PolkadotContext';
 import { EnvironmentProvider } from '../contexts/EnvironmentContext';
+import Header from '../components/layout/Header';
 import '../public/css/daos.css';
 import '../public/css/ideas.css';
 import '../public/output.css';
 import '../public/theme.css';
-
-import dynamic from 'next/dynamic';
-
-const Header = dynamic(() => import('../components/layout/Header'), { ssr: false });
 
 function MyApp({ Component, pageProps }) {
   return (
