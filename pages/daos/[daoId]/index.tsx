@@ -22,7 +22,7 @@ import DonateCoinToEventModal from '../../../features/DonateCoinToEventModal';
 
 export default function DAO() {
   const [goalsList, setGoalsList] = useState([]);
-  const { api, getUserInfoById, GetAllVotes, GetAllIdeas, GetAllJoined, GetAllGoals,GetAllEvents } = usePolkadotContext();
+  const { api, getUserInfoById, GetAllVotes, GetAllIdeas, GetAllJoined, GetAllGoals, GetAllEvents } = usePolkadotContext();
   const [DaoURI, setDaoURI] = useState({ Title: '', Description: '', SubsPrice: null, Start_Date: '', End_Date: '', logo: '', wallet: '', typeimg: '', allFiles: [], isOwner: false, daoId: null, user_id: null, user_info: null } as Dao);
   const [daoIdTxt, setDaoTxtID] = useState('');
   const [daoId, setDaoID] = useState(-1);
@@ -42,11 +42,6 @@ export default function DAO() {
   const [AuctionEvents, setAuctionEvents] = useState([]);
 
   const router = useRouter();
-
-  const mockEvents: CharityEvent[] = [
-    { id: '1', title: 'Annual Food Drive', endDate: new Date(), amountOfNFTs: 8, target: 1000, raised: 200.53, imageUrl: 'https://www.efsa.europa.eu/sites/default/files/news/food-donations.jpg' },
-    { id: '2', title: 'Annual Food Drive', endDate: new Date(), amountOfNFTs: 8, target: 1000, raised: 200.53, imageUrl: 'https://www.efsa.europa.eu/sites/default/files/news/food-donations.jpg' }
-  ];
 
   useEffect(() => {
     getDaoID();
@@ -184,7 +179,7 @@ export default function DAO() {
         //Load everything-----------
 
         let allGoals = await GetAllGoals();
-     
+
         let currentGoals = allGoals.filter((e) => e?.daoId == daoIdTxt.toString());
 
         const arr = [];
@@ -206,22 +201,21 @@ export default function DAO() {
 
         let allEvents = await GetAllEvents();
         let currentEvents = allEvents.filter((e) => e?.daoId == daoIdTxt.toString());
-       
+
         let eventArr = [];
         for (let i = 0; i < currentEvents.length; i++) {
           const elmEvent = currentEvents[i];
           eventArr.push({
             id: elmEvent.id,
-            title:  elmEvent.Title,
-            endDate:elmEvent.End_Date,
-            amountOfNFTs:0,
-            target:elmEvent.Budget,
+            title: elmEvent.Title,
+            endDate: elmEvent.End_Date,
+            amountOfNFTs: 0,
+            target: elmEvent.Budget,
             raised: 0,
-            imageUrl:elmEvent.logo,
-          })
+            imageUrl: elmEvent.logo
+          });
         }
         setAuctionEvents(eventArr.reverse());
-
 
         setLoading(false);
       }

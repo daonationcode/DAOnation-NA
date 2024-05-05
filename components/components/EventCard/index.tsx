@@ -6,9 +6,11 @@ import useEnvironment from '../../../services/useEnvironment';
 import { CharityEvent } from '../../../data-model/event';
 import Link from 'next/link';
 import { Button } from '@heathmont/moon-core-tw';
+import { useRouter } from 'next/router';
 
 const EventCard = ({ item, className = '', onClickDonate }: { item: CharityEvent; className?: string; onClickDonate?: MouseEventHandler }) => {
   const [showPlaceholder, setShowPlaceholder] = useState(false);
+  const router = useRouter();
   const { getCurrency } = useEnvironment();
 
   return (
@@ -36,7 +38,7 @@ const EventCard = ({ item, className = '', onClickDonate }: { item: CharityEvent
             <Button variant="secondary" iconLeft={<ShopWallet />} onClick={onClickDonate}>
               Donate
             </Button>
-            <Link href={`${location.pathname}/event/${item.id}`}>
+            <Link href={`${router.pathname}/event/${item.id}`}>
               <Button iconLeft={<ArrowsRightShort />}>Go to event</Button>
             </Link>
           </div>
