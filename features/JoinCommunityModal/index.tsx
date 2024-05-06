@@ -222,20 +222,20 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
               </div>
             </div>
 
-            {Amount > Balance ? (
+            {/* {Amount > Balance ? (
               <p className="pt-5 text-right text-dodoria">Insufficient funds</p>
             ) : (
               <p className="pt-5 text-right">
                 Your balance is {Balance} {Coin}
               </p>
-            )}
+            )} */}
           </div>
 
           <div className="flex justify-between border-t border-beerus w-full p-6">
             <Button variant="ghost" onClick={onHide}>
               Cancel
             </Button>
-            <Button id="CreateGoalBTN" type="submit" onClick={JoinSubmission} animation={isLoading ? 'progress' : false} disabled={Amount > Balance || isLoading}>
+            <Button id="CreateGoalBTN" type="submit" onClick={JoinSubmission} animation={isLoading ? 'progress' : false}>
               Join
             </Button>
           </div>

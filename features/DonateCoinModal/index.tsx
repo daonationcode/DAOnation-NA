@@ -10,6 +10,7 @@ import { sendTransfer } from '../../services/wormhole/useSwap';
 import { Button, Dropdown, IconButton, MenuItem, Modal } from '@heathmont/moon-core-tw';
 import { ControlsClose } from '@heathmont/moon-icons-tw';
 import UseFormInput from '../../components/components/UseFormInput';
+import { Alert } from '@mui/material';
 
 export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide, address, recieveWallet, recievetype }) {
   const [Balance, setBalance] = useState('');
@@ -192,7 +193,7 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
           </div>
           <div className="flex flex-col gap-6 w-full max-h-[calc(90vh-162px)]">
             <form id="doanteForm" onSubmit={DonateCoinSubmission} autoComplete="off">
-              {/* <div name="alertbox" hidden>
+              <div name="alertbox" hidden>
                 <Alert variant="filled" sx={{ my: 1 }} name="pendingAlert" severity="info">
                   Pending....
                 </Alert>
@@ -202,7 +203,7 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
                 <Alert variant="filled" sx={{ my: 1 }} name="errorAlert" severity="error">
                   Error....
                 </Alert>
-              </div> */}
+              </div>
 
               <div className="flex flex-col gap-2 py-16 px-6">
                 <div className="flex items-center ">
