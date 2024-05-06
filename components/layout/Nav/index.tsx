@@ -125,7 +125,7 @@ export function Nav(): JSX.Element {
   }, [count, router.pathname]);
   useEffect(() => {
     changedPath = true;
-  }, [router.pathname])
+  }, [router.pathname]);
 
   setInterval(() => {
     if (!isServer()) {
@@ -154,8 +154,8 @@ export function Nav(): JSX.Element {
         <ul className="flex justify-between items-center w-full">
           {isSigned && (
             <span className="hidden sm:inline-flex">
-              {hasJoinedCommunities && <NavItem highlight={router.pathname === '/joined'} link="/joined" label="Joined communities" />}
-              <NavItem highlight={router.pathname === '/daos'} link="/daos" label="Communities" />
+              {hasJoinedCommunities && <NavItem highlight={router.pathname === '/joined'} link="/joined" label="Joined charities" />}
+              <NavItem highlight={router.pathname === '/daos'} link="/daos" label="Charities" />
               <NavItem label="Create Your Charity" onClick={openModal} />
               <NavItem highlight={router.pathname === '/events'} link="/events" label="All events" />
             </span>

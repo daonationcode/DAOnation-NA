@@ -35,7 +35,7 @@ export default function DAOs() {
       const joinedDaosList = [];
 
       allJoined.forEach((joined_dao) => {
-        let foundDao = allDaos.filter((e) => e?.daoId == joined_dao.daoId.toString());
+        let foundDao = allDaos.filter((e) => e?.daoId == joined_dao.daoId?.toString());
         if (joined_dao.user_id.toString() == window.userid.toString() && foundDao.length > 0) {
           joinedDaosList.push(foundDao[0]);
         }

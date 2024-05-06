@@ -12,6 +12,7 @@ import { Dao } from '../../data-model/dao';
 import { useRouter } from 'next/router';
 import { JOINED } from '../../data-model/joined';
 declare let window;
+
 export const Joined = () => {
   const { api, GetAllDaos, GetAllJoined } = usePolkadotContext();
   const [list, setList] = useState([]);
@@ -27,7 +28,7 @@ export const Joined = () => {
 
   async function fetchContractData() {
     setLoading(true);
-    //Fetching data from Smart contract
+
     try {
       if (contract && api) {
         let allDaos = (await GetAllDaos()) as any as Dao[];
@@ -36,22 +37,21 @@ export const Joined = () => {
         const arrList = [];
 
         allJoined.forEach((joined_dao) => {
-          let foundDao = (allDaos as any).filter((e) => e?.daoId == joined_dao.daoId.toString());
+          let foundDao = (allDaos as any).filter((e) => e?.daoId == joined_dao.daoId?.toString());
           if (joined_dao.user_id.toString() == window.userid.toString() && foundDao.length > 0) {
             arrList.push(foundDao[0]);
           }
         });
 
-        // allDaos.forEach((dao) => {
-        //   console.log('outer', dao);
-        //   if (Number(dao.user_id) === Number(window.userid)) {
-        //     arrList.push(dao);
-        //     console.log('inner', dao);
-        //   }
-        // });
+        if (arrList.length === 0) {
+          router.push('/daos');
+        }
+
         setList(arrList.reverse());
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('ERR', error);
+    }
 
     setLoading(false);
   }

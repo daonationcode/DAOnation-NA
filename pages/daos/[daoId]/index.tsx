@@ -17,7 +17,6 @@ import useContract from '../../../services/useContract';
 import CommunitySwitcher from '../../../features/CommunitySwitcher';
 import EventCard from '../../../components/components/EventCard';
 import CreateEventModal from '../../../features/CreateEventModal';
-import { CharityEvent } from '../../../data-model/event';
 import DonateCoinToEventModal from '../../../features/DonateCoinToEventModal';
 
 export default function DAO() {
@@ -99,7 +98,7 @@ export default function DAO() {
     setLeaving(true);
 
     try {
-      // Leaving Community in Smart contract
+      // Leaving charity in Smart contract
       await window.sendTransaction(await window.contract.populateTransaction.leave_community(Number(JoinedID)));
 
       router.push('/joined');
@@ -271,36 +270,38 @@ export default function DAO() {
                 </div>
               </h3>
             </div>
-            <div className="flex flex-col gap-2 absolute top-0 right-0">
-              {(isOwner || isJoined) && (
-                <>
-                  <Button iconLeft={<ControlsPlus />} onClick={openCreateEventModal}>
-                    Create event
-                  </Button>
-                  <Button variant="secondary" iconLeft={<ControlsPlus />} onClick={openCreateGoalModal}>
-                    Create goal
-                  </Button>
-                </>
-              )}
+            {!loading && DaoURI.Title && (
+              <div className="flex flex-col gap-2 absolute top-0 right-0">
+                {(isOwner || isJoined) && (
+                  <>
+                    <Button iconLeft={<ControlsPlus />} onClick={openCreateEventModal}>
+                      Create event
+                    </Button>
+                    <Button variant="secondary" iconLeft={<ControlsPlus />} onClick={openCreateGoalModal}>
+                      Create goal
+                    </Button>
+                  </>
+                )}
 
-              {isJoined && !isOwner && (
-                <Button onClick={leaveCommunity} iconLeft={<GenericLogOut />} variant="secondary" animation={leaving ? 'progress' : false}>
-                  Leave
-                </Button>
-              )}
-              {isOwner && (
-                <Link href={`/DesignDao?[${daoIdTxt}]`}>
-                  <Button iconLeft={<GenericEdit />} variant="secondary" className="w-full">
-                    Edit
+                {isJoined && !isOwner && (
+                  <Button onClick={leaveCommunity} iconLeft={<GenericLogOut />} variant="secondary" animation={leaving ? 'progress' : false}>
+                    Leave
                   </Button>
-                </Link>
-              )}
-              {/* {isOwner && (
+                )}
+                {isOwner && (
+                  <Link href={`/DesignDao?[${daoIdTxt}]`}>
+                    <Button iconLeft={<GenericEdit />} variant="secondary" className="w-full">
+                      Edit
+                    </Button>
+                  </Link>
+                )}
+                {/* {isOwner && (
                 <Button iconLeft={<GenericDelete />} className="bg-dodoria" onClick={deleteDao}>
                   Delete
                 </Button>
               )} */}
-            </div>
+              </div>
+            )}
           </div>
           <div className="container">
             <Tabs selectedIndex={tabIndex} onChange={setTabIndex}>

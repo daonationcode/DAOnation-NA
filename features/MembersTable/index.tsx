@@ -30,7 +30,7 @@ const MembersTable = ({ allJoined, goals }) => {
               </div>
             </Tooltip.Trigger>
             <Tooltip.Content className="bg-gohan">
-              This level is based on amount of received donations, votes, and comments within this community.
+              This level is based on amount of received donations, votes, and comments within this charity.
               <Tooltip.Arrow className="bg-gohan" />
             </Tooltip.Content>
           </Tooltip>

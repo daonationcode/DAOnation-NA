@@ -47,7 +47,7 @@ export const TopCommunityMembers = ({ daoId, allJoined, goals }) => {
 
   return (
     <Card className="flex flex-col gap-4 w-[236px] h-fit">
-      <h5 className="text-trunks text-moon-14">Top community members by</h5>
+      <h5 className="text-trunks text-moon-14">Top charity members by</h5>
       <Dropdown value={selectedOption} onChange={setSelectedOption}>
         {({ open }) => (
           <>

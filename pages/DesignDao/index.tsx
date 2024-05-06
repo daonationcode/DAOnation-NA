@@ -469,7 +469,7 @@ export default function DesignDao() {
       <div id="editor">
         <div id="dao-container"></div>
       </div>
-      <div className="absolute z-10 top-0 left-0 h-[85px] w-full shadow-moon-lg flex justify-between items-center p-5" style={{ background: 'linear-gradient(0deg, #EC1F52 -366.48%, #09013E 100%)' }}>
+      <div className="absolute z-10 top-0 left-0 h-[85px] w-full shadow-moon-lg flex justify-between items-center p-5" style={{ background: 'linear-gradient(0deg, #b3804a -366.48%, #ffffff 34.69%)' }}>
         <Input aria-label="name" className="max-w-[320px]" value={DaoURI.Title} disabled />
         <div className="flex flex-1 justify-end items-center gap-2">
           <Button variant="ghost" className="!text-white !bg-transparent" onClick={() => history.back()}>

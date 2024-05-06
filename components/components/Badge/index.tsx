@@ -2,7 +2,7 @@ import { Avatar } from '@heathmont/moon-core-tw';
 
 export const Badge = ({ icon, label, description, granted }: { icon: JSX.Element; label: string; description: string; granted?: boolean }) => {
   return (
-    <div className="bg-goku rounded-moon-i-md flex border border-beerus flex gap-5 items-center p-6">
+    <div className="bg-goku rounded-moon-i-md flex border border-beerus gap-5 items-center p-6 flex-1 basis-1/2 max-w-[372px]">
       <Avatar size="2xl" className={`${granted ? 'bg-hit text-gohan' : 'bg-gohan text-trunks'} rounded-full text-moon-48`}>
         {icon}
       </Avatar>

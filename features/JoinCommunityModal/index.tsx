@@ -62,7 +62,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
     const daoIdNumber = Number(daoId.split('_')[1]);
 
     setisLoading(true);
-    const id = toast.loading('Joining Community ...');
+    const id = toast.loading('Joining charity ...');
     let feed = JSON.stringify({
       daoId: daoId,
       name: userInfo?.fullName?.toString()
@@ -75,7 +75,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
     }
     if (Coin == 'DOT') {
       toast.update(id, {
-        render: 'Joining Community....'
+        render: 'Joining charity....'
       });
       let recipient = recievetype == 'Polkadot' ? recieveWallet : address;
       const txs = [api.tx.balances.transferAllowDeath(recipient, `${Amount * 1e12}`), api._extrinsics.daos.joinCommunity(daoId, Number(window.userid), new Date().toLocaleDateString(), feed), api._extrinsics.feeds.addFeed(feed, 'join', new Date().valueOf())];
@@ -170,7 +170,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
       <Modal.Panel className="bg-gohan w-[90%] max-w-[480px]">
         <div className={`flex items-center justify-center flex-col`}>
           <div className="flex justify-between items-center w-full border-b border-beerus py-4 px-6">
-            <h1 className="text-moon-20 font-semibold">Join community "{title}"</h1>
+            <h1 className="text-moon-20 font-semibold">Join charity "{title}"</h1>
             <IconButton className="text-trunks" variant="ghost" icon={<ControlsClose />} onClick={onHide} />
           </div>
           {/* <div name="alertbox" hidden>
