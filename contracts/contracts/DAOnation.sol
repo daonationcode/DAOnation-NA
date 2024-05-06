@@ -61,7 +61,7 @@ contract DAOnation {
   }
 
   struct join_struct {
-    uint256 daoid;
+    string daoId;
     uint256 user_id;
     string joined_date;
   }
@@ -254,28 +254,28 @@ contract DAOnation {
     _donations_ids++;
   }
 
-  function join_community(uint256 dao_id, uint256 person,string memory joined_date, string memory _feed) public {
+  function join_community(string memory dao_id, uint256 person,string memory joined_date, string memory _feed) public {
     _user_badges[person].joined = true;
-    _joined_person[_join_ids] = join_struct({daoid: dao_id, user_id: person,joined_date:joined_date});
+    _joined_person[_join_ids] = join_struct({daoId: dao_id, user_id: person,joined_date:joined_date});
     _join_ids++;
     add_Feed(_feed, 'join');
   }
 
   function leave_community(uint256 join_id) public {
-    _joined_person[join_id] = join_struct({daoid: 9999, user_id: 9999,joined_date:""});
+    _joined_person[join_id] = join_struct({daoId: "9999", user_id: 9999,joined_date:""});
   }
 
-  function is_person_joined(uint256 dao_id, uint256 person) public view returns (bool) {
+  function is_person_joined(string memory dao_id, uint256 person) public view returns (bool) {
     for (uint256 i = 0; i < _join_ids; i++) {
-      if ((_joined_person[i].user_id == person) && (_joined_person[i].daoid == dao_id)) return true;
+      if ((_joined_person[i].user_id == person) && (keccak256(bytes(_joined_person[i].daoId)) == keccak256(bytes(dao_id)))) return true;
     }
 
     return false;
   }
 
-  function get_person_joinedID(uint256 dao_id, uint256 person) public view returns (uint256) {
+  function get_person_joinedID(string memory dao_id, uint256 person) public view returns (uint256) {
     for (uint256 i = 0; i < _join_ids; i++) {
-      if ((_joined_person[i].user_id == person) && (_joined_person[i].daoid == dao_id)) return i;
+      if ((_joined_person[i].user_id == person) && (keccak256(bytes(_joined_person[i].daoId)) == keccak256(bytes(dao_id)))) return i;
     }
 
     return 9999;

@@ -9,6 +9,7 @@ import { ControlsClose } from '@heathmont/moon-icons-tw';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { ethers } from 'ethers';
+declare let window;
 
 export default function JoinCommunityModal({ SubsPrice, show, onHide, address, recieveWallet, recievetype, title, daoId }) {
   const [Balance, setBalance] = useState(0);
@@ -92,7 +93,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
           render: 'Sending Batch Transaction....'
         });
 
-        await BatchJoin(Amount, recipient, daoIdNumber, feed);
+        await BatchJoin(Amount, recipient, daoId, feed);
         toast.update(id, {
           render: 'Purchased Subscription successfully!',
           type: 'success',
@@ -111,7 +112,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
         });
 
         // Saving Joined Person on smart contract
-        await sendTransaction(await window.contract.populateTransaction.join_community(daoIdNumber, Number(window.userid), new Date().toLocaleDateString(), feed));
+        await sendTransaction(await window.contract.populateTransaction.join_community(daoId, Number(window.userid), new Date().toLocaleDateString(), feed));
         onSuccess();
       }
     }
@@ -130,14 +131,14 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
     async function setMetamask() {
       const Web3 = require('web3');
       const web3 = new Web3(window.ethereum);
-      let Balance = await web3.eth.getBalance(window?.ethereum?.selectedAddress?.toLocaleUpperCase());
+      let Balance = await web3.eth.getBalance(window?.selectedAddress);
 
-      if (Coin !== 'DEV') {
+      if (Coin == 'xcvGLMR') {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
 
         const tokenInst = new ethers.Contract(vTokenAbi.address, vTokenAbi.abi, provider);
 
-        Balance = await tokenInst.balanceOf(window?.ethereum?.selectedAddress);
+        Balance = await tokenInst.balanceOf(window?.selectedAddress);
       }
 
       setBalance(Number((Balance / 1000000000000000000).toPrecision(5)));
@@ -152,6 +153,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
       await switchNetworkByToken(Coin);
       setPolkadot();
     } else if (currencyChanged == true && Coin !== 'DOT') {
+      await window.ethereum.enable();
       await switchNetworkByToken(Coin);
       setMetamask();
     }
@@ -222,20 +224,20 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
               </div>
             </div>
 
-            {Amount > Balance ? (
+            {/* {Amount > Balance ? (
               <p className="pt-5 text-right text-dodoria">Insufficient funds</p>
             ) : (
               <p className="pt-5 text-right">
                 Your balance is {Balance} {Coin}
               </p>
-            )}
+            )} */}
           </div>
 
           <div className="flex justify-between border-t border-beerus w-full p-6">
             <Button variant="ghost" onClick={onHide}>
               Cancel
             </Button>
-            <Button id="CreateGoalBTN" type="submit" onClick={JoinSubmission} animation={isLoading ? 'progress' : false} disabled={Amount > Balance || isLoading}>
+            <Button id="CreateGoalBTN" type="submit" onClick={JoinSubmission} animation={isLoading ? 'progress' : false}>
               Join
             </Button>
           </div>

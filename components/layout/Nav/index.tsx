@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import CreateDaoModal from '../../../features/CreateDaoModal';
 import { usePolkadotContext } from '../../../contexts/PolkadotContext';
+import { useUniqueVaraContext } from '../../../contexts/UniqueVaraContext';
 import useEnvironment from '../../../services/useEnvironment';
 import { GenericUser } from '@heathmont/moon-icons-tw';
 
@@ -15,6 +16,7 @@ let changedPath = true;
 
 export function Nav(): JSX.Element {
   const { api, userInfo } = usePolkadotContext();
+  const { varaApi } = useUniqueVaraContext();
   const [acc, setAcc] = useState('');
   const [logo, setLogo] = useState('');
   const [user_id, setUser_id] = useState(-1);
@@ -78,6 +80,37 @@ export function Nav(): JSX.Element {
           setCurrency('DOT');
 
           setBalance(Number(balance.free.toString()) / 1e12 + ' DOT');
+          if (!isSigned) setSigned(true);
+
+          setAcc(userInfo?.fullName?.toString());
+          setLogo(userInfo?.imgIpfs?.toString());
+          setUser_id(window.userid);
+
+          window.document.getElementById('withoutSign').style.display = 'none';
+          window.document.getElementById('withSign').style.display = '';
+          running = false;
+          changedPath = false;
+          return;
+        } else {
+          running = false;
+          changedPath = false;
+          return;
+        }
+      } catch (e) {
+        running = false;
+        changedPath = false;
+        return;
+      }
+    } else if (window.localStorage.getItem('login-type') === 'polkadot-vara') {
+      const { web3Accounts, web3Enable } = require('@polkadot/extension-dapp');
+      try {
+        let wallet = (await web3Accounts())[0];
+        if (wallet && varaApi && userInfo?.fullName) {
+          const { nonce, data: balance } = await varaApi.query.system.account(wallet.address);
+
+          setCurrency('VARA');
+
+          setBalance(Number(balance.free.toString()) / 1e12 + ' VARA');
           if (!isSigned) setSigned(true);
 
           setAcc(userInfo?.fullName?.toString());

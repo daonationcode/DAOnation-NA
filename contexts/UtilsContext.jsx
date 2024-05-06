@@ -119,6 +119,15 @@ export function UtilsProvider({ children }) {
   }
 
   async function switchNetworkByToken(token) {
+    if (token == "VARA"){
+
+      const { web3Enable } = require('@polkadot/extension-dapp');
+      await web3Enable('DAOnation');
+      window.localStorage.setItem('loggedin', 'true');
+      window.localStorage.setItem('login-type', 'polkadot-vara');
+      return;
+    }
+    
     if (token == "DOT"){
 
       const { web3Enable } = require('@polkadot/extension-dapp');

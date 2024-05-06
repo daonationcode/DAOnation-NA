@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\code\\steve\\DAOnation-NA\\contracts\\contracts\\DAOnation.sol": {
-      "lastModificationDate": 1715001782479,
-      "contentHash": "d78fc4e62b790cc8f882e9d2bb1888fa",
+      "lastModificationDate": 1715076588237,
+      "contentHash": "fdb30b77ce9155a57e8fe8cc9192a382",
       "sourceName": "contracts/DAOnation.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -691,6 +691,51 @@
       ],
       "artifacts": [
         "AggregatorV3Interface"
+      ]
+    },
+    "D:\\code\\steve\\DAOnation-NA\\contracts\\contracts\\DAOAuction.sol": {
+      "lastModificationDate": 1717078910280,
+      "contentHash": "24af4f0b14704b3c4df6deaeb2ebeb1d",
+      "sourceName": "contracts/DAOAuction.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/Strings.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "DAOAuction"
       ]
     }
   }

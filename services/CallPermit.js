@@ -1,5 +1,6 @@
 
 import { ethers } from 'ethers';
+import HDWalletProvider from '@truffle/hdwallet-provider'
 import { SignTypedDataVersion } from '@metamask/eth-sig-util';
 import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
 import CallPermitABI from '../contracts/artifacts/contracts/precompiles/CallPermit.sol/CallPermit.json';
@@ -117,6 +118,7 @@ export default async function CallPermit(methodWithSignature) {
 
     let sig = await signData();
 
+    let providerURL = 'https://rpc.api.moonbase.moonbeam.network';
 
     // Making Call Permit Dispatch
 
@@ -125,7 +127,7 @@ export default async function CallPermit(methodWithSignature) {
     // Create web3.js middleware that signs transactions locally
     const localKeyProvider = new HDWalletProvider({
         privateKeys: [myPrivateKeyHex],
-        providerOrUrl: provider,
+        providerOrUrl: providerURL,
     });
     const web3 = new Web3(localKeyProvider);
 
@@ -136,6 +138,5 @@ export default async function CallPermit(methodWithSignature) {
     await CallPermitContract.dispatch(from, to, 0, data, gaslimit, deadline, signature.v, signature.r, signature.s.toString()).send({ from: myAccount.address });
 
 
-    console.log(output);
 }
 

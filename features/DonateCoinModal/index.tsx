@@ -10,6 +10,8 @@ import { sendTransfer } from '../../services/wormhole/useSwap';
 import { Button, Dropdown, IconButton, MenuItem, Modal } from '@heathmont/moon-core-tw';
 import { ControlsClose } from '@heathmont/moon-icons-tw';
 import UseFormInput from '../../components/components/UseFormInput';
+import { Alert } from '@mui/material';
+declare let window;
 
 export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide, address, recieveWallet, recievetype }) {
   const [Balance, setBalance] = useState('');
@@ -39,9 +41,9 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
   });
 
   function ShowAlert(type = 'default', message) {
-    const pendingAlert = alertBox.children['pendingAlert'];
-    const successAlert = alertBox.children['successAlert'];
-    const errorAlert = alertBox.children['errorAlert'];
+    const pendingAlert = alertBox.querySelector('#pendingAlert');
+    const successAlert = alertBox.querySelector('#successAlert');
+    const errorAlert = alertBox.querySelector('#errorAlert');
 
     alertBox.style.display = 'block';
     pendingAlert.style.display = 'none';
@@ -67,7 +69,7 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
     e.preventDefault();
     console.clear();
     setisSent(false);
-    alertBox = e.target.querySelector('[name=alertbox]');
+    alertBox = e.target.querySelector('#alertbox');
     setisLoading(true);
     ShowAlert('pending', 'Donating ...');
 
@@ -143,20 +145,20 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
     async function setMetamask() {
       const Web3 = require('web3');
       const web3 = new Web3(window.ethereum);
-      let Balance = await web3.eth.getBalance(window?.ethereum?.selectedAddress?.toLocaleUpperCase());
+      let Balance = await web3.eth.getBalance(window?.selectedAddress);
 
-      if (Coin !== 'DEV') {
+      if (Coin == 'xcvGLMR' ) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
 
         const tokenInst = new ethers.Contract(vTokenAbi.address, vTokenAbi.abi, provider);
 
-        Balance = await tokenInst.balanceOf(window?.ethereum?.selectedAddress);
+        Balance = await tokenInst.balanceOf(window?.selectedAddress);
       }
 
       setBalance((Balance / 1000000000000000000).toFixed(5));
       setCurrentChain(getChain(Number(window.ethereum.networkVersion)).name);
       setCurrentChainNetwork(Number(window.ethereum.networkVersion));
-      setCurrentAddress(window?.ethereum?.selectedAddress?.toLocaleUpperCase());
+      setCurrentAddress(window?.selectedAddress);
     }
 
     if (PolkadotLoggedIn && currencyChanged == false && Coin == '') {
@@ -166,6 +168,8 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
       setPolkadot();
     } else if (currencyChanged == true && Coin !== 'DOT' && Coin !== '') {
       await switchNetworkByToken(Coin);
+      
+      await window.ethereum.enable();
       setMetamask();
     }
   }
@@ -192,17 +196,17 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
           </div>
           <div className="flex flex-col gap-6 w-full max-h-[calc(90vh-162px)]">
             <form id="doanteForm" onSubmit={DonateCoinSubmission} autoComplete="off">
-              {/* <div name="alertbox" hidden>
-                <Alert variant="filled" sx={{ my: 1 }} name="pendingAlert" severity="info">
+              <div id="alertbox" hidden>
+                <Alert variant="filled" sx={{ my: 1 }} id="pendingAlert" severity="info">
                   Pending....
                 </Alert>
-                <Alert variant="filled" sx={{ my: 1 }} name="successAlert" severity="success">
+                <Alert variant="filled" sx={{ my: 1 }} id="successAlert" severity="success">
                   Success....
                 </Alert>
-                <Alert variant="filled" sx={{ my: 1 }} name="errorAlert" severity="error">
+                <Alert variant="filled" sx={{ my: 1 }} id="errorAlert" severity="error">
                   Error....
                 </Alert>
-              </div> */}
+              </div>
 
               <div className="flex flex-col gap-2 py-16 px-6">
                 <div className="flex items-center ">

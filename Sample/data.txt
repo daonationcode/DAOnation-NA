@@ -1,95 +1,73 @@
-Users:
-1. 
+Data for videoUsers:
+password: 12345678
+1.
 Ariel Amir
 arielamir2013@yahoo.com
-
 2.
 Adrian Kobus
 akobus923@gmail.com
-
-3. 
+3.
 Aleksey Petrov
 petrov4003@gmail.com
-
 4.
 Elia Zia
 zialia5405@gmail.com
-
 5.
 Sofia Dippel
 sd.kr402@outlook.com
 
-
-Dao1:
-Harvard University
-Harvard University is a private Ivy League research university in Cambridge, Massachusetts. Founded in 1636 as Harvard College and named for its first benefactor, the Puritan clergyman John Harvard, it is the oldest institution of higher learning in the United States. Its influence, wealth, and rankings have made it one of the most prestigious universities in the world.
-
-
-Dao2:
-Woodmarket FC
-
-Dao3:
-St. John's Church
-
-
-
-
-
-Dao:
-Conscious Nona
-
-Conscious Nona is a wellbeing community focusing on activating self-awareness to connect and create sustainable, conscious communities. Conscious Nona is located in the heart of Central Florida, and is renowned for its picturesque landscapes, innovative technology, and a strong sense of community.
-
-
-The centerpiece of this charming neighborhood is its namesake, Lake Nona, a beautiful 500-acre lake that provides a serene and tranquil atmosphere. The lake serves as a focal point for recreational activities, from boating and fishing to jogging and leisurely strolls along its scenic shores. The sight of sunsets reflecting off the tranquil waters is a captivating experience that residents and visitors alike cherish.
-
-One of the defining features of Lake Nona is its commitment to sustainable and environmentally friendly development. The area is known for its master-planned communities, green spaces, and conservation efforts, creating an ecologically balanced and aesthetically pleasing environment.
-
-
-Video Link: https://www.youtube.com/watch?v=-caKTHhZRko
+Charities:
+1.
+Title: Feeding America
+Membership fee: 0.05$
+Description: Feeding America is a United States–based non-profit organization that is a nationwide network of more than 200 food banks that feed more than 46 million people through food pantries, soup kitchens, shelters, and other community-based agencies. Forbes ranks it as the largest U.S. charity by revenue.
+Video link: https://www.youtube.com/watch?v=Py5JW5J8afg
 background color: #196666
 button background color: #C1A050
-Image 1: https://i.postimg.cc/2SBFj30Q/1.png
-Image 2: https://i.postimg.cc/SK6683Fj/2.jpg
-Image 3: https://i.postimg.cc/9McGBbCb/3.png
-
+Image 1: https://media.licdn.com/dms/image/D4E12AQFJwrxG2fuvGQ/article-cover_image-shrink_720_1280/0/1692715350135?e=1720656000&v=beta&t=tDznSYCYTx88Fk7x3wJWZQQR0RPvrl6hBshPf9aWKQ0
+Image 2:  https://media-cldnry.s-nbcnews.com/image/upload/MSNBC/Components/Video/201909/tdy_news_9a_jones_hunger_190912_1920x1080.jpg
+Image 3: https://i.postimg.cc/V6czjHdP/20170626-161621.jpg
+2.
+Title: Doctors Without Borders
+Image: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Mgw3Xg5IEGpQsQlgUhpKfsr2alD7ud9KaFgYmJ78eg&s
+3.
+Title: World Wildlife Fund (WWF)
+Image: https://graffica.info/wp-content/uploads/2017/07/WWF-Oso-Polar-1200x900.jpg
 
 Goal:
-Making the Conscious Nona community clubhouse more sustainable with natural materials
-
-Come with ideas how we can make the Conscious Nona clubhouse fully sustainable together. The clubhouse is an important meeting place to inspire members to adopt greener lifestyles and collaborative events will foster a culture of sustainability.
-Some ideas: Solar panels adorn the rooftop, harnessing the sun's energy to power the facility, while large windows and skylights maximise natural light, reducing the need for artificial lighting. The incorporation of locally sourced, recycled materials imparts a unique charm while minimising the clubhouse's carbon footprint.
-$500,000
+Title: Community food security in Texas
+Description: Community food security in Texas" aims to ensure that every Texan has consistent access to nutritious food, free from the constraints of financial limitations or geographical barriers. This objective involves multifaceted strategies, including addressing food insecurity by implementing programs for food distribution, meal assistance, and nutrition education targeted at vulnerable communities. Beyond mere sustenance, the objective emphasizes the importance of promoting nutritional health, offering diverse and wholesome food options to support the overall well-being of individuals and families.
+Moreover, achieving community food security in Texas entails building sustainable food systems resilient to shocks such as natural disasters or economic fluctuations. This involves supporting local farmers, advocating for policies enhancing food sovereignty, and fostering urban agriculture initiatives. Empowering communities is central to this objective, encouraging ownership through education, capacity building, and community engagement. By providing resources, fostering partnerships, and facilitating participatory decision-making processes, communities can tailor solutions that best reflect their needs and preferences.
+Equity and accessibility are paramount in the pursuit of community food security in Texas. Recognizing the impact of factors like income, race, geography, and disability, efforts are made to address disparities and barriers to access. Prioritizing equity ensures that all Texans have the opportunity to access nutritious food, fostering health, sustainability, and resilience across the state.
+Image: https://shoutoutdfw.com/wp-content/uploads/2022/09/c-PersonalRajAsava__IMG62621_1661282528627.jpg
+Amount: $1.500.000
 
 Ideas:
-1. Solar panels on the Conscious Nona clubhouse
-We can install 15 LED lights and 3-80W photovoltaic panels, on the community center. Then it will has reliable lighting and electricity. It will cost: $48,071.55
-
-Referenda ID: 40
-
-Rules:
-https://uploadify.net/5273d350dfd001d1/quotation_Consequences_Nona_community_center.pdf
-$48,071.55
-
-
-
-
-2. Winturbines on the Churchtower
-We can cach a lot of wind and produce energy by attaching windturbines to the Church tower. It will power 23 households. 
-It will cost: $65,000.
-
-
-3. Solar panels on the roof of the school
-we can add Solar panels and sedum to the roof of the new School Building. It will produce energy for 30 households.
-It will cost: $185,000
-
-4. Heatpumps in the park
-By implementing Geothermal energy in the park we can heat 15 homes in winter.
-It will cost: $150,000
+1.
+Title: Mobile Food Pantries
+Description: Implementing mobile food pantry programs to bring fresh produce and nutritious food directly to underserved communities, particularly in rural areas or food deserts. Estimated cost: $50,000 per year per mobile unit, including vehicle maintenance, staff salaries, and food procurement.
+Image: https://www.utahfoodbank.org/wp-content/uploads/2017/02/Mobile-Pantry-Serving-Utahs-Veterans.jpg
+2. 
+Title: Community Gardens and Urban Farming Initiatives
+Description: Supporting the establishment of community gardens and urban farming projects in neighborhoods lacking access to fresh produce. This could involve providing funding for land acquisition, seeds, tools, and educational resources. Estimated cost: $10,000 per project, depending on size and scope.
+Image: https://cdn.hosted-assets.com/nourishingneighbors/ul/q_auto/9DEY071R/c89e77/c89e77-iStock-1364679535.jpg
+3.
+Title: School-based Nutrition Programs
+Description: Expanding school-based nutrition programs to ensure that children from low-income families have access to healthy meals year-round, including during school holidays and breaks. This may involve funding meal preparation, kitchen equipment, and staffing. Estimated cost: $100,000 per school per year, depending on the number of meals served and program scale.
+Image: https://go.vcuhealth.org//media/BlogImages/schoollunch.jpg
+4.
+Title: Food Recovery and Redistribution
+Description: Partnering with food banks, restaurants, and grocery stores to recover surplus food that would otherwise go to waste and redistribute it to those in need. Costs include transportation, storage, and operational expenses for food recovery and distribution centers. Estimated cost: $50,000 per year per distribution center, depending on capacity and volume of food handled.
+Image: https://www.biocycle.net/wp-content/uploads/2014/09/42a.jpg
+5.
+Title: Nutrition Education and Cooking Classes
+Description: Offering nutrition education workshops and cooking classes to empower individuals and families with the knowledge and skills to make healthy, affordable meals. Costs include curriculum development, instructor salaries, and materials. Estimated cost: $25.000 per program, depending on duration and reach.
+Image: https://www.unmc.edu/newsroom/wp-content/uploads/2018/12/Nutrition1219.jpg
 
 
 
 
-This is a great idea. I have donated and hope that this idea get enough votes 🚀
-Thanks for donating
+
+
+
 

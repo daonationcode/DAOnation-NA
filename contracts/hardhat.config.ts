@@ -15,6 +15,12 @@ module.exports = {
 			chainId: 1287,
 			gasPrice: 10_000_000_000
 		},
+		unique:{
+			url: "https://rpc-opal.unique.network",
+			accounts: [`b672a502a2a0942705d989a1db0c9d9904f45c32f35c0f6b7c5180420fd073df`],
+			chainId: 8882,
+			gasPrice: 10_000_000_000_000
+		}
 	},
 	//Specifing Solidity compiler version
 	solidity: {
