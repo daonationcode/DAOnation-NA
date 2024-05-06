@@ -4,6 +4,7 @@ import { Avatar, IconButton } from '@heathmont/moon-core-tw';
 import { GenericHeart, GenericIdea, GenericPending, GenericUser, ShopWallet, SportDarts, SportSpecials } from '@heathmont/moon-icons-tw';
 import IdeaCard from '../IdeaCard';
 import GoalCard from '../GoalCard';
+import EventCard from '../EventCard';
 import { useEffect, useState } from 'react';
 import useEnvironment from '../../../services/useEnvironment';
 import { usePolkadotContext } from '../../../contexts/PolkadotContext';
@@ -108,6 +109,53 @@ function GoalActivity({ data }) {
         </p>
       </div>
       <GoalCard item={goalURI} className="shadow-none !bg-goku border border-beerus" />
+    </div>
+  );
+}
+
+
+function AuctionActivity({ data }) {
+  const { api, GetAllEvents } = usePolkadotContext();
+
+  const [eventURI, setEventURI] = useState({
+    id: "",
+    eventId: "",
+    daoId: "",
+    Title: "",
+    Description: "",
+    Budget: 0,
+    End_Date: new Date(),
+    wallet: "",
+    UserId: "",
+    logo: "",
+    type: "",
+    reached: 0,
+    amountOfNFTs:0,
+  });
+
+  async function fetchContractData() {
+    if (api) {
+      let allEvent = await GetAllEvents();
+      let currentEvent = allEvent.filter((e) => e.eventId == data.eventId)[0];
+      setEventURI(currentEvent);
+    }
+  }
+
+  useEffect(() => {
+    fetchContractData();
+  }, [api]);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex gap-4 w-full items-center">
+        <Avatar size="lg" className="rounded-full bg-jiren text-bulma shrink-0">
+          <SportDarts className="text-moon-32" />
+        </Avatar>
+        <p>
+          <span className="text-piccolo">{data.name}</span> just created an event
+        </p>
+      </div>
+      <EventCard item={eventURI} className="shadow-none !bg-goku border border-beerus" />
     </div>
   );
 }
@@ -223,6 +271,7 @@ const ActivityCard = ({ old_date, type, data, className = '', hideGoToButton = f
       {type === 'badge' && <BadgeActivity data={data} />}
       {type === 'vote' && <VoteActivity data={data} />}
       {type === 'goal' && <GoalActivity data={data} />}
+      {type === 'event' && <AuctionActivity data={data} />}
       {type === 'donation' && <DonationActivity data={data} />}
       {type === 'idea' && <IdeaActivity data={data} hideGoToButton={hideGoToButton} />}
     </Card>

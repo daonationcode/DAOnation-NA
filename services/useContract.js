@@ -10,7 +10,7 @@ import HDWalletProvider from '@truffle/hdwallet-provider'
 import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
 import CallPermit from './CallPermit';
 let providerURL = 'https://rpc.api.moonbase.moonbeam.network';
-
+import MoonbeamAcc from './json/moonbeam_accounts.json'
 export default function useContract() {
 	const [contractInstance, setContractInstance] = useState({
 		contract: null,
@@ -218,25 +218,5 @@ export function formatTemplate(template, changings) {
 
 export async function saveReadMessage(messageid, ideasid, msg_type) {
 
-	let myPrivateKeyHex = "1aaf69473f4f8f88822046eb5f8d3e30f06eb290e82e32162dcf96bd5d8a2495";
-
-	// Create web3.js middleware that signs transactions locally
-	const localKeyProvider = new HDWalletProvider({
-		privateKeys: [myPrivateKeyHex],
-		providerOrUrl: providerURL,
-	});
-	const web3 = new Web3(localKeyProvider);
-	if ((await contract.getReadMsg(messageid, msg_type)) || (await web3.eth.getPendingTransactions().length) > 0) {
-		return;
-	}
-
-	const myAccount = web3.eth.accounts.privateKeyToAccount(myPrivateKeyHex);
-
-	const DAOnationContract = new web3.eth.Contract(DAOnation.abi, DAOnation.address).methods
-
-	window.DAOnationContract = DAOnationContract;
-	await DAOnationContract.sendReadMsg(messageid, ideasid, Number(window.userid), msg_type).send({ from: myAccount.address });
-
-	console.log("read message ->", messageid)
-
+return;
 }

@@ -401,6 +401,7 @@ export function PolkadotProvider({ children }) {
         arr.push({
           //Pushing all data into array
           id: i,
+          eventId: eventId,
           daoId: daoId,
           Title: object.properties.Title.description,
           Description: object.properties.Description.description,
@@ -411,6 +412,7 @@ export function PolkadotProvider({ children }) {
           logo: object.properties.logo.description?.url,
           type: prefix == 'm_' ? 'Polkadot' : 'EVM',
           reached: reached,
+          amountOfNFTs:0,
         });
       }
     }

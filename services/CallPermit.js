@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import { SignTypedDataVersion } from '@metamask/eth-sig-util';
 import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
 import CallPermitABI from '../contracts/artifacts/contracts/precompiles/CallPermit.sol/CallPermit.json';
+import MoonbeamAcc from './json/moonbeam_accounts.json'
+import Web3 from 'web3';
 
 export default async function CallPermit(methodWithSignature) {
 
@@ -14,15 +16,16 @@ export default async function CallPermit(methodWithSignature) {
     const to = DAOnation.address;
     const value = 0;
     const data = methodWithSignature.data;
-
-    const gaslimit = 1000000000;
-    const deadline = Math.round(new Date().getTime() / 1000) + 500;
+    let transction = { "to": DAOnation.address, data: data };
+    let estimatedGas = await provider.estimateGas(transction)
+    const gaslimit = estimatedGas;
+    const deadline = Math.round(new Date().getTime() / 1000) + 1500;
     const Call_Permit_address = '0x000000000000000000000000000000000000080a'
 
     const CallPermitContact = new ethers.Contract(Call_Permit_address, CallPermitABI.abi, signer)
 
 
-    const nonce =await CallPermitContact.nonces(from);
+    const nonce = await CallPermitContact.nonces(from);
 
 
 
@@ -37,14 +40,14 @@ export default async function CallPermit(methodWithSignature) {
         deadline: deadline,
     };
 
-    let domain =  {
+    let domain = {
         name: 'Call Permit Precompile',
         version: '1',
         chainId: 1287,
         verifyingContract: '0x000000000000000000000000000000000000080a',
     }
     let types = {
-        
+
         CallPermit: [
             {
                 name: 'from',
@@ -79,7 +82,7 @@ export default async function CallPermit(methodWithSignature) {
     const typedData = ({
         types: types,
         primaryType: 'CallPermit',
-        domain:domain,
+        domain: domain,
         message: message,
     });
 
@@ -88,7 +91,7 @@ export default async function CallPermit(methodWithSignature) {
     const signData = async () => {
 
 
-    
+
         try {
             const rawSig = await signer._signTypedData(domain, types, message);
 
@@ -106,22 +109,33 @@ export default async function CallPermit(methodWithSignature) {
                 s: signature.s,
                 v: signature.v.toString(),
             });
-        
+
         } catch (err) {
-        console.error(err);
-    }
-};
+            console.error(err);
+        }
+    };
 
-let sig = await signData();
-console.log(sig);
-// Making Call Permit Dispatch
-
-let output = await CallPermitContact.dispatch(from, to, 0, data, gaslimit, deadline, signature.v, signature.r, signature.s.toString(),{
-    gasLimit:gaslimit
-})
+    let sig = await signData();
 
 
+    // Making Call Permit Dispatch
 
-console.log(output);
+    let myPrivateKeyHex = MoonbeamAcc.private_key;
+
+    // Create web3.js middleware that signs transactions locally
+    const localKeyProvider = new HDWalletProvider({
+        privateKeys: [myPrivateKeyHex],
+        providerOrUrl: provider,
+    });
+    const web3 = new Web3(localKeyProvider);
+
+    const myAccount = web3.eth.accounts.privateKeyToAccount(myPrivateKeyHex);
+
+    const CallPermitContract = new web3.eth.Contract(CallPermitABI.abi, Call_Permit_address).methods
+
+    await CallPermitContract.dispatch(from, to, 0, data, gaslimit, deadline, signature.v, signature.r, signature.s.toString()).send({ from: myAccount.address });
+
+
+    console.log(output);
 }
 
