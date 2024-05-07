@@ -3,10 +3,7 @@ import EventCard from '../../components/components/EventCard';
 import { CharityEvent } from '../../data-model/event';
 
 export default function Events() {
-  let mockEvents = [
-    { id: '1', title: 'Annual Food Drive', endDate: new Date(), amountOfNFTs: 8, target: 1000, raised: 200.53, imageUrl: 'https://www.efsa.europa.eu/sites/default/files/news/food-donations.jpg' },
-    { id: '2', title: 'Annual Food Drive', endDate: new Date(), amountOfNFTs: 8, target: 1000, raised: 200.53, imageUrl: 'https://www.efsa.europa.eu/sites/default/files/news/food-donations.jpg' }
-  ];
+ 
 
   return (
     <>
@@ -24,7 +21,11 @@ export default function Events() {
             </div>
           </div>
         </div>
-        <div className="container flex flex-col gap-8 items-center"> </div>
+        <div className="container flex flex-col gap-8 items-center">
+          {/* {mockEvents.map((event, index) => (
+            <EventCard item={event} key={index} />
+          ))} */}
+        </div>
       </div>
     </>
   );
