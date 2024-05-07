@@ -41,7 +41,7 @@ export default function useContract() {
 					window.signer = signer;
 					contract.signerAddress = (await signer.getAddress())?.toString()?.toLocaleUpperCase();
 					window.signerAddress = contract.signerAddress;
-
+					window.selectedAddress = (await signer.getAddress())?.toString();
 					setContractInstance(contract);
 					// console.clear();
 				} else {

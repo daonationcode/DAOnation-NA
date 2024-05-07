@@ -11,6 +11,7 @@ import { Button, Dropdown, IconButton, MenuItem, Modal } from '@heathmont/moon-c
 import { ControlsClose } from '@heathmont/moon-icons-tw';
 import UseFormInput from '../../components/components/UseFormInput';
 import { Alert } from '@mui/material';
+declare let window;
 
 export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide, address, recieveWallet, recievetype }) {
   const [Balance, setBalance] = useState('');
@@ -144,20 +145,20 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
     async function setMetamask() {
       const Web3 = require('web3');
       const web3 = new Web3(window.ethereum);
-      let Balance = await web3.eth.getBalance(window?.ethereum?.selectedAddress?.toLocaleUpperCase());
+      let Balance = await web3.eth.getBalance(window?.selectedAddress);
 
-      if (Coin !== 'DEV') {
+      if (Coin == 'xcvGLMR' ) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
 
         const tokenInst = new ethers.Contract(vTokenAbi.address, vTokenAbi.abi, provider);
 
-        Balance = await tokenInst.balanceOf(window?.ethereum?.selectedAddress);
+        Balance = await tokenInst.balanceOf(window?.selectedAddress);
       }
 
       setBalance((Balance / 1000000000000000000).toFixed(5));
       setCurrentChain(getChain(Number(window.ethereum.networkVersion)).name);
       setCurrentChainNetwork(Number(window.ethereum.networkVersion));
-      setCurrentAddress(window?.ethereum?.selectedAddress?.toLocaleUpperCase());
+      setCurrentAddress(window?.selectedAddress);
     }
 
     if (PolkadotLoggedIn && currencyChanged == false && Coin == '') {
@@ -167,6 +168,8 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
       setPolkadot();
     } else if (currencyChanged == true && Coin !== 'DOT' && Coin !== '') {
       await switchNetworkByToken(Coin);
+      
+      await window.ethereum.enable();
       setMetamask();
     }
   }

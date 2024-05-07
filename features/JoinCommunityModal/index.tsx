@@ -9,6 +9,7 @@ import { ControlsClose } from '@heathmont/moon-icons-tw';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { ethers } from 'ethers';
+declare let window;
 
 export default function JoinCommunityModal({ SubsPrice, show, onHide, address, recieveWallet, recievetype, title, daoId }) {
   const [Balance, setBalance] = useState(0);
@@ -130,14 +131,14 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
     async function setMetamask() {
       const Web3 = require('web3');
       const web3 = new Web3(window.ethereum);
-      let Balance = await web3.eth.getBalance(window?.ethereum?.selectedAddress?.toLocaleUpperCase());
+      let Balance = await web3.eth.getBalance(window?.selectedAddress);
 
-      if (Coin !== 'DEV') {
+      if (Coin == 'xcvGLMR') {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
 
         const tokenInst = new ethers.Contract(vTokenAbi.address, vTokenAbi.abi, provider);
 
-        Balance = await tokenInst.balanceOf(window?.ethereum?.selectedAddress);
+        Balance = await tokenInst.balanceOf(window?.selectedAddress);
       }
 
       setBalance(Number((Balance / 1000000000000000000).toPrecision(5)));
@@ -152,6 +153,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
       await switchNetworkByToken(Coin);
       setPolkadot();
     } else if (currencyChanged == true && Coin !== 'DOT') {
+      await window.ethereum.enable();
       await switchNetworkByToken(Coin);
       setMetamask();
     }
