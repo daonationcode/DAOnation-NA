@@ -71,8 +71,8 @@ const MembersTable = ({ allJoined, goals }) => {
       let allIdeas = await GetAllIdeas();
       for (let i = 0; i < allJoined.length; i++) {
         const element = allJoined[i];
-        let userInfo = await getUserInfoById(element.user_id);
-        let allIdeasIds = allIdeas.map((e) => e.user_id == element.user_id);
+        let userInfo = await getUserInfoById(Number(element.user_id));
+        let allIdeasIds = allIdeas.map((e) =>  Number(e.user_id) == Number(element.user_id));
 
         let allDonations = await GetAllDonations();
         let totalAmount = 0;
