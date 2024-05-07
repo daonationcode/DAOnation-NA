@@ -40,9 +40,9 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
   });
 
   function ShowAlert(type = 'default', message) {
-    const pendingAlert = alertBox.children['pendingAlert'];
-    const successAlert = alertBox.children['successAlert'];
-    const errorAlert = alertBox.children['errorAlert'];
+    const pendingAlert = alertBox.querySelector('#pendingAlert');
+    const successAlert = alertBox.querySelector('#successAlert');
+    const errorAlert = alertBox.querySelector('#errorAlert');
 
     alertBox.style.display = 'block';
     pendingAlert.style.display = 'none';
@@ -68,7 +68,7 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
     e.preventDefault();
     console.clear();
     setisSent(false);
-    alertBox = e.target.querySelector('[name=alertbox]');
+    alertBox = e.target.querySelector('#alertbox');
     setisLoading(true);
     ShowAlert('pending', 'Donating ...');
 
@@ -193,14 +193,14 @@ export default function DonateCoinModal({ ideasid, daoId, goalURI, show, onHide,
           </div>
           <div className="flex flex-col gap-6 w-full max-h-[calc(90vh-162px)]">
             <form id="doanteForm" onSubmit={DonateCoinSubmission} autoComplete="off">
-              <div name="alertbox" hidden>
-                <Alert variant="filled" sx={{ my: 1 }} name="pendingAlert" severity="info">
+              <div id="alertbox" hidden>
+                <Alert variant="filled" sx={{ my: 1 }} id="pendingAlert" severity="info">
                   Pending....
                 </Alert>
-                <Alert variant="filled" sx={{ my: 1 }} name="successAlert" severity="success">
+                <Alert variant="filled" sx={{ my: 1 }} id="successAlert" severity="success">
                   Success....
                 </Alert>
-                <Alert variant="filled" sx={{ my: 1 }} name="errorAlert" severity="error">
+                <Alert variant="filled" sx={{ my: 1 }} id="errorAlert" severity="error">
                   Error....
                 </Alert>
               </div>

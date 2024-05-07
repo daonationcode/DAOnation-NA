@@ -19,7 +19,7 @@ sd.kr402@outlook.com
 Charities:
 1.
 Title: Feeding America
-Membership fee: 5$
+Membership fee: 0.05$
 Description: Feeding America is a United States–based non-profit organization that is a nationwide network of more than 200 food banks that feed more than 46 million people through food pantries, soup kitchens, shelters, and other community-based agencies. Forbes ranks it as the largest U.S. charity by revenue.
 Video link: https://www.youtube.com/watch?v=Py5JW5J8afg
 background color: #196666

@@ -1,0 +1,18 @@
+Steps:
+Creating account (make before 4 account beforehand), and show only one account creation in the video
+Creating two charities before the video.
+Don’t show the text editor screen with the login for all the users.
+Zoom in on the new person details in the top right shortly everytime you switch accounts.
+Don't show login when switching accounts (so only one time).
+
+Video Flow:
+Polkadot SDK with Adrian Kobus: Create Account - > Visit Profile to add coin -> Create Charity -> Edit Charity 
+
+Moonbeam with Aleksy Petrov : Join Charity -> Create Goal -> Show badges
+
+Polkadot SDK with Elia Zia: Create Idea
+
+Polkadot SdK with Adrian Kobus : Donate to Idea -> Show badges
+
+Moonbeam with Sofia Dippel:  Vote Idea  -> Donate to Idea -> Comments -> Show badges -> Logout
+

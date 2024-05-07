@@ -92,7 +92,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
           render: 'Sending Batch Transaction....'
         });
 
-        await BatchJoin(Amount, recipient, daoIdNumber, feed);
+        await BatchJoin(Amount, recipient, daoId, feed);
         toast.update(id, {
           render: 'Purchased Subscription successfully!',
           type: 'success',
@@ -111,7 +111,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, r
         });
 
         // Saving Joined Person on smart contract
-        await sendTransaction(await window.contract.populateTransaction.join_community(daoIdNumber, Number(window.userid), new Date().toLocaleDateString(), feed));
+        await sendTransaction(await window.contract.populateTransaction.join_community(daoId, Number(window.userid), new Date().toLocaleDateString(), feed));
         onSuccess();
       }
     }
