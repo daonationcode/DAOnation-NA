@@ -109,6 +109,24 @@ const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }) => {
     </Card>
   );
 
+  const ConnectVaraButton = () => (
+    <Card className="max-w-[480px] w-full">
+      <div className="flex w-full flex-col gap-10">
+        <div className="flex items-center w-full justify-between">
+          <div className="rounded-moon-s-md mr-6 min-w-[84px]">
+            <Image height={80} width={80} src="/images/vara.svg" alt="" />
+          </div>
+          <div className="flex flex-col justify-between xs:flex-row xs:w-full">
+            <p className="font-bold text-moon-20 flex-1">Vara Network</p>
+            <Button disabled className="min-w-[175px] xs:min-w-0" iconLeft={<SoftwareLogin />}>
+              Connect
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+
   return (
     <>
       {step == 1 && LoginForm()}
@@ -117,6 +135,8 @@ const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }) => {
           {ConnectPolkadotButton()}
           <div>Or</div>
           {ConnectMetamaskButton()}
+          <div>Or</div>
+          {ConnectVaraButton()}
         </div>
       )}
     </>
