@@ -65,6 +65,18 @@
         "ICA":"0xDb91D575F17d8AAf1aFEC0eaDBD5Ac9e5Cef4ad0",
         "IGP": "0x8f9C3888bFC8a5B25AED115A82eCbb788b196d2a",
         "HCA": "0x2e6cC8035d79887DfA5Bace98a4Aeeabbfc302ab"
+    },
+    {
+        "name": "Opal testnet by Unique",
+        "chainId": 8882,
+        "shortName": "OPALT",
+        "chain": "OPAL",
+        "networkId": 8882,
+        "nativeCurrency": { "name": "UNQ", "symbol": "UNQ", "decimals": 18 },
+        "rpc": ["https://rpc-opal.unique.network"],
+        "faucets": ["https://idea.gear-tech.io/"],
+        "infoURL": "https://docs.celo.org/",
+        "explorers": [{ "name": "Unique", "url": "https://uniquescan.io/opal", "standard": "EIP3091" }]
     }
 ]
 }

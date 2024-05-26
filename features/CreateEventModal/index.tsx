@@ -12,7 +12,7 @@ import Required from '../../components/components/Required';
 
 import { toast } from 'react-toastify';
 import useEnvironment from '../../services/useEnvironment';
-
+ declare let window;
 let addedDate = false;
 export default function CreateEventModal({ open, onClose, daoId }) {
   const [EventImage, setEventImage] = useState([]);
@@ -145,11 +145,11 @@ export default function CreateEventModal({ open, onClose, daoId }) {
       });
     } else {
       try {
-        const eventid = Number(await window.contract._event_ids());
+        const eventid = Number(await window.contractUnique._event_ids());
         feed.eventid = 'm_' + eventid;
 
         // Creating Event in Smart contract
-        await sendTransaction(await window.contract.populateTransaction.create_event(JSON.stringify(createdObject), daoId, Number(window.userid), JSON.stringify(feed)));
+        await sendTransaction(await window.contractUnique.populateTransaction.create_event(JSON.stringify(createdObject),window.signerAddress, daoId, Number(window.userid), JSON.stringify(feed)));
         toast.update(ToastId, {
           render: 'Created Successfully!',
           type: 'success',

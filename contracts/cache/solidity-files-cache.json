@@ -692,6 +692,51 @@
       "artifacts": [
         "AggregatorV3Interface"
       ]
+    },
+    "D:\\code\\steve\\DAOnation-NA\\contracts\\contracts\\DAOAuction.sol": {
+      "lastModificationDate": 1716716538018,
+      "contentHash": "d06aba9c16d39b9f91ba49e56b4fb235",
+      "sourceName": "contracts/DAOAuction.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/Strings.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "DAOAuction"
+      ]
     }
   }
 }

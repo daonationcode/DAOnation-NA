@@ -444,17 +444,17 @@ export function PolkadotProvider({ children }) {
   async function fetchContractEventData() {
     //Fetching data from Smart contract
     try {
-      if (window.contract) {
-        const totalGoalCount = Number(await contract._goal_ids());
-        let totalGoal = async () => {
+      if (window.contractUnique) {
+        const totalEventCount = Number(await contractUnique._event_ids());
+        let totalEvent = async () => {
           const arr = [];
-          for (let i = 0; i < Number(totalGoalCount); i++) {
-            const goal_info = await contract._goal_uris(i);
-            arr.push(goal_info);
+          for (let i = 0; i < Number(totalEventCount); i++) {
+            const event_info = await contractUnique._event_uris(i);
+            arr.push(event_info);
           }
           return arr;
         }
-        let arr = InsertGoalData(totalGoalCount, await totalGoal(), 'm_');
+        let arr = InsertEventData(totalEventCount, await totalEvent(), 'm_');
         return arr;
 
       }
@@ -465,7 +465,7 @@ export function PolkadotProvider({ children }) {
   async function GetAllEvents() {
     let arr = [];
     arr = arr.concat(await fetchPolkadotEventData());
-    // arr = arr.concat(await fetchContractEventData());
+    arr = arr.concat(await fetchContractEventData());
     return arr;
   }
 

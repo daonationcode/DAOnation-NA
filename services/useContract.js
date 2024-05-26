@@ -4,16 +4,18 @@ import HCABI from "./json/HCABI.json"
 import Web3 from 'web3';
 import chains from "./json/chains.json"
 import IGPABI from "./json/IGPABI.json"
-import ERC20Singleton from './ERC20Singleton';
+import {ERC20Singleton,ERC20Unique} from './ERC20Singleton';
 import { useUtilsContext } from '../contexts/UtilsContext';
 import HDWalletProvider from '@truffle/hdwallet-provider'
 import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
+import DAOauction from '../contracts/deployments/unique/DAOAuction.json';
 import CallPermit from './CallPermit';
 let providerURL = 'https://rpc.api.moonbase.moonbeam.network';
 import MoonbeamAcc from './json/moonbeam_accounts.json'
 export default function useContract() {
 	const [contractInstance, setContractInstance] = useState({
 		contract: null,
+		contractUnique: null,
 		signerAddress: null,
 		sendTransaction: sendTransaction,
 		formatTemplate: formatTemplate,
@@ -27,14 +29,17 @@ export default function useContract() {
 				if (window.localStorage.getItem("login-type") === "metamask") {
 					const provider = new ethers.providers.Web3Provider(window.ethereum);
 					const signer = provider.getSigner();
-					const contract = { contract: null, signerAddress: null, sendTransaction: sendTransaction, formatTemplate: formatTemplate, saveReadMessage: saveReadMessage };
+					const contract = { contract: null, contractUnique: null, signerAddress: null, sendTransaction: sendTransaction, formatTemplate: formatTemplate, saveReadMessage: saveReadMessage };
 
 					window.provider = provider;
 
 
 					let contract2 = await ERC20Singleton();
+					let contractUnique = await ERC20Unique();
 					contract.contract = contract2;
+					contract.contractUnique = contractUnique;
 					window.contract = contract2;
+					window.contractUnique = contractUnique;
 
 
 					window.sendTransaction = sendTransaction;
@@ -72,13 +77,16 @@ export default function useContract() {
 		await ethereum.enable();
 
 		if (Number(window.ethereum.networkVersion) === 1287) { //If it is sending from Moonbase then it will not use bridge
-			// const tx = {
-			// 	...methodWithSignature,
-			// 	value: 0,
-			// }
-			// await (await window.signer.sendTransaction(tx)).wait();
-
+			
 			await CallPermit(methodWithSignature);
+			return;
+		}
+		if (Number(window.ethereum.networkVersion) === 8882){//If it is sending from Unique then direct
+			const tx = {
+				...methodWithSignature,
+				value: 0,
+			}
+			await (await window.signer.sendTransaction(tx)).wait();
 			return;
 		}
 

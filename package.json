@@ -10,6 +10,7 @@
     "css:watch": "npx tailwindcss -i ./styles/globals.css -o ./public/output.css -w",
     "css:build": "npx tailwindcss -i ./styles/globals.css -o ./public/output.css",
     "deploy": "cd contracts && hardhat deploy --network moonbase",
+    "deploy-unique": "cd contracts &&  hardhat run \"deploy/deploy-unique.js\" --network unique",
     "verify": "cd contracts && hardhat verify --network moonbase $(cat address.txt)",
     "deploy-verify": "npm run deploy && npm run verify"
   },
