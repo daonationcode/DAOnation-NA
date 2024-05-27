@@ -25,11 +25,11 @@ const NFTCard = ({ item, className, onShowBidHistory, onShowPlaceHigherBid, disp
             <p>
               Highest bid is{' '}
               <span className="font-bold">
-                {getCurrency()} {item.highestBid.bidAmount}
+                {getCurrency()} {Number(item.highest_amount) / 1e18}
               </span>
             </p>
             <p>
-              by <span className="text-piccolo">{item.highestBid.bidder}</span>
+              by <span className="text-piccolo">{item.highest_bidder.substring(0,10)}...{item.highest_bidder.substring(item.highest_bidder.length - 10, item.highest_bidder.length)}</span>
             </p>
           </div>
           <div className="flex flex-col gap-2 w-full items-center">

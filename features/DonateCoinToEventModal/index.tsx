@@ -3,11 +3,19 @@ import { Button, Dropdown, IconButton, MenuItem, Modal } from '@heathmont/moon-c
 import { ControlsClose } from '@heathmont/moon-icons-tw';
 import UseFormInput from '../../components/components/UseFormInput';
 import useEnvironment from '../../services/useEnvironment';
+import { useUniqueVaraContext } from '../../contexts/UniqueVaraContext';
+import { usePolkadotContext } from '../../contexts/PolkadotContext';
+import { useUtilsContext } from '../../contexts/UtilsContext';
 
+declare let window;
 export default function DonateCoinToEventModal({ open, onClose, eventName }) {
-  const [Balance, setBalance] = useState();
-  const [coin, setCoin] = useState('');
+  const [Balance, setBalance] = useState("");
+  const [BalanceAmount, setBalanceAmount] = useState(0);
+  const [Coin, setCoin] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const {varaApi} = useUniqueVaraContext()
+  const {PolkadotLoggedIn,userWalletPolkadot,} = usePolkadotContext()
+  const {  switchNetworkByToken }: {  switchNetworkByToken: Function } = useUtilsContext();
 
   const { getCurrency } = useEnvironment();
 
@@ -23,11 +31,40 @@ export default function DonateCoinToEventModal({ open, onClose, eventName }) {
     console.log('DONATE COIN');
   }
 
-  async function LoadData() {}
+  async function LoadData(currencyChanged = false) {
+    async function setPolkadotVara() {
+      if (Coin !== 'VARA') setCoin('VARA');
+      const { nonce, data: balance } = await varaApi.query.system.account(userWalletPolkadot);
+      setBalance((Number(balance.free.toString()) / 1e12).toString());
+      setBalanceAmount(Number(balance.free.toString())/ 1e12);
+    }
 
+    async function setMetamask() {
+      const Web3 = require('web3');
+      const web3 = new Web3(window.ethereum);
+      let Balance = await web3.eth.getBalance(window?.selectedAddress);
+
+      setBalance((Balance / 1e18).toFixed(5));
+    
+    }
+
+    if (PolkadotLoggedIn && currencyChanged == false && Coin == '') {
+      setPolkadotVara();
+    } else if (currencyChanged == true && Coin == 'VARA') {
+      switchNetworkByToken("VARA")
+      setPolkadotVara();
+    } else if (currencyChanged == true && Coin !== 'VARA' && Coin !== '') {
+     
+      await window.ethereum.enable();
+      setMetamask();
+    }
+  }
   function isInvalid() {
     return !Amount;
   }
+  useEffect(() => {
+    if (Coin !== '') LoadData(true);
+  }, [Coin]);
 
   useEffect(() => {
     LoadData();
@@ -48,32 +85,21 @@ export default function DonateCoinToEventModal({ open, onClose, eventName }) {
                 <div className="flex items-center ">
                   <span className="font-semibold flex-1">Total</span>
                   <div className="max-w-[140px] mr-4"> {AmountInput}</div>
-                  <Dropdown value={coin} onChange={setCoin} className="max-w-[100px] ">
-                    <Dropdown.Select>{coin}</Dropdown.Select>
+                  <Dropdown value={Coin} onChange={setCoin} className="max-w-[100px] ">
+                    <Dropdown.Select>{Coin}</Dropdown.Select>
                     <Dropdown.Options className="bg-gohan w-48 min-w-0">
-                      <Dropdown.Option value="DOT">
-                        <MenuItem>DOT</MenuItem>
-                      </Dropdown.Option>
-                      <Dropdown.Option value="DEV">
-                        <MenuItem>DEV</MenuItem>
-                      </Dropdown.Option>
-                      <Dropdown.Option value="xcvGLMR">
-                        <MenuItem>xcvGLMR</MenuItem>
-                      </Dropdown.Option>
-                      <Dropdown.Option value="tBNB">
-                        <MenuItem>BNB</MenuItem>
-                      </Dropdown.Option>
-                      <Dropdown.Option value="CELO">
-                        <MenuItem>CELO</MenuItem>
-                      </Dropdown.Option>
-                      <Dropdown.Option value="GoerliETH">
-                        <MenuItem>ETH</MenuItem>
-                      </Dropdown.Option>
+                      <Dropdown.Option value="UNQ">
+                        <MenuItem>UNQ</MenuItem>
+                      </Dropdown.Option>          
+                      <Dropdown.Option value="VARA">
+                        <MenuItem>VARA</MenuItem>
+                      </Dropdown.Option>  
+                  
                     </Dropdown.Options>
                   </Dropdown>
                 </div>
 
-                <p className="text-trunks w-full text-right">Your balance will be {Number(Balance) - AmountInput + ' ' + getCurrency()} </p>
+                <p className="text-trunks w-full text-right">Your balance will be {Number(BalanceAmount) - Amount + ' ' + getCurrency()} </p>
               </div>
 
               <div className="flex justify-between border-t border-beerus w-full p-6">

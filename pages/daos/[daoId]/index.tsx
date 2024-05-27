@@ -204,15 +204,7 @@ export default function DAO() {
         let eventArr = [];
         for (let i = 0; i < currentEvents.length; i++) {
           const elmEvent = currentEvents[i];
-          eventArr.push({
-            id: elmEvent.id,
-            title: elmEvent.Title,
-            endDate: elmEvent.End_Date,
-            amountOfNFTs: 0,
-            target: elmEvent.Budget,
-            raised: 0,
-            imageUrl: elmEvent.logo
-          });
+          eventArr.push(elmEvent);
         }
         setAuctionEvents(eventArr.reverse());
 

@@ -11,6 +11,7 @@ import DAOnation from '../contracts/deployments/moonbase/DAOnation.json';
 import DAOauction from '../contracts/deployments/unique/DAOAuction.json';
 import CallPermit from './CallPermit';
 let providerURL = 'https://rpc.api.moonbase.moonbeam.network';
+let UniqueProviderURL = 'https://rpc-opal.unique.network';
 import MoonbeamAcc from './json/moonbeam_accounts.json'
 export default function useContract() {
 	const [contractInstance, setContractInstance] = useState({
@@ -27,9 +28,9 @@ export default function useContract() {
 		const fetchData = async () => {
 			try {
 				if (window.localStorage.getItem("login-type") === "metamask") {
+					const contract = { contract: null, contractUnique: null, signerAddress: null, sendTransaction: sendTransaction, formatTemplate: formatTemplate, saveReadMessage: saveReadMessage };
 					const provider = new ethers.providers.Web3Provider(window.ethereum);
 					const signer = provider.getSigner();
-					const contract = { contract: null, contractUnique: null, signerAddress: null, sendTransaction: sendTransaction, formatTemplate: formatTemplate, saveReadMessage: saveReadMessage };
 
 					window.provider = provider;
 
@@ -50,8 +51,8 @@ export default function useContract() {
 					setContractInstance(contract);
 					// console.clear();
 				} else {
-					const contract = { contract: null, signerAddress: null, sendTransaction: sendTransaction, formatTemplate: formatTemplate, saveReadMessage: saveReadMessage };
-
+					const contract = { contract: null, contractUnique: null, signerAddress: null, sendTransaction: sendTransaction, formatTemplate: formatTemplate, saveReadMessage: saveReadMessage };
+				
 					// Define provider
 					const provider = new ethers.providers.JsonRpcProvider(providerURL, {
 						chainId: 1287,
@@ -61,6 +62,16 @@ export default function useContract() {
 					const contract2 = new ethers.Contract(DAOnation.address, DAOnation.abi, signer)
 					contract.contract = contract2;
 					window.contract = contract2;
+
+					// Define providerUnique
+					const uniiqueProvider = new ethers.providers.JsonRpcProvider(UniqueProviderURL, {
+						chainId: 8882,
+						name: 'unique-testnet'
+					});	
+					const contractUnique = new ethers.Contract(DAOauction.address, DAOauction.abi, uniiqueProvider)
+					contract.contractUnique = contractUnique;
+					window.contractUnique = contractUnique;
+
 					setContractInstance(contract);
 
 				}

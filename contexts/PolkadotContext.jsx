@@ -17,7 +17,6 @@ const AppContext = createContext({
   GetAllDaos: async () => [],
   GetAllJoined: async () => [],
   GetAllGoals: async () => [],
-  GetAllEvents: async () => [],
   GetAllFeeds: async () => [],
   GetAllIdeas: async () => [],
   GetAllVotes: async () => [],
@@ -372,104 +371,6 @@ export function PolkadotProvider({ children }) {
     arr = arr.concat(await fetchContractGoalData());
     return arr;
   }
-
-  async function InsertEventData(totalEventCount, allEvents, prefix) {
-    const arr = [];
-    for (let i = 0; i < totalEventCount; i++) {
-      let object = '';
-      let daoId = "";
-      if (prefix == 'm_') {
-        object = JSON.parse(allEvents[i].event_uri);
-        daoId = allEvents[i].dao_id;
-      } else {
-        if (allEvents[i]?.eventUri) {
-          object = JSON.parse(allEvents[i].eventUri?.toString());
-          daoId = allEvents[i].daoId.toString();
-        }
-      }
-      let eventId = prefix + i;
-
-      let reached = 0;
-      // let currentEventIdeas = allIdeas.filter((e) => e.eventId == eventId)
-      // for (let i = 0; i < currentEventIdeas.length; i++) {
-      //   const element = (currentEventIdeas[i]);
-      //   reached += element.donation;
-      // }
-
-
-      if (object) {
-        arr.push({
-          //Pushing all data into array
-          id: i,
-          eventId: eventId,
-          daoId: daoId,
-          Title: object.properties.Title.description,
-          Description: object.properties.Description.description,
-          Budget: object.properties.Budget.description,
-          End_Date: object.properties.End_Date.description,
-          wallet: object.properties.wallet.description,
-          UserId: object.properties?.user_id?.description,
-          logo: object.properties.logo.description?.url,
-          type: prefix == 'm_' ? 'Polkadot' : 'EVM',
-          reached: reached,
-          amountOfNFTs:0,
-        });
-      }
-    }
-    return arr;
-  }
-  async function fetchPolkadotEventData() {
-    //Fetching data from Parachain
-    try {
-      if (api) {
-        let totalEventCount = Number(await api._query.events.eventIds());
-
-        let totalEvent = async () => {
-          let arr = [];
-          for (let i = 0; i < totalEventCount; i++) {
-            const element = await api._query.events.eventById(i);
-            let eventURI = element['__internal__raw'];
-
-            arr.push(eventURI);
-          }
-          return arr;
-        };
-
-        let arr = InsertEventData(totalEventCount, await totalEvent(), 'p_');
-        return arr;
-      }
-    } catch (error) { }
-    return [];
-  }
-  async function fetchContractEventData() {
-    //Fetching data from Smart contract
-    try {
-      if (window.contractUnique) {
-        const totalEventCount = Number(await contractUnique._event_ids());
-        let totalEvent = async () => {
-          const arr = [];
-          for (let i = 0; i < Number(totalEventCount); i++) {
-            const event_info = await contractUnique._event_uris(i);
-            arr.push(event_info);
-          }
-          return arr;
-        }
-        let arr = InsertEventData(totalEventCount, await totalEvent(), 'm_');
-        return arr;
-
-      }
-    } catch (error) { }
-
-    return [];
-  }
-  async function GetAllEvents() {
-    let arr = [];
-    arr = arr.concat(await fetchPolkadotEventData());
-    arr = arr.concat(await fetchContractEventData());
-    return arr;
-  }
-
-
   async function fetchPolkadotFeedsData() {
     //Fetching data from Parachain
     try {
@@ -756,7 +657,7 @@ export function PolkadotProvider({ children }) {
     return users;
   }
 
-  return <AppContext.Provider value={{ api: api, deriveAcc: deriveAcc, GetAllGoals: GetAllGoals, GetAllIdeas: GetAllIdeas,GetAllEvents:GetAllEvents, GetAllVotes: GetAllVotes, GetAllFeeds: GetAllFeeds,GetAllDonations:GetAllDonations,GetAllUserDonations:GetAllUserDonations, updateCurrentUser: updateCurrentUser, GetAllDaos: GetAllDaos, GetAllJoined: GetAllJoined, showToast: showToast, EasyToast: EasyToast, getUserInfoById: getUserInfoById, userWalletPolkadot: userWalletPolkadot, userSigner: userSigner, PolkadotLoggedIn: PolkadotLoggedIn, userInfo: userInfo }}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{ api: api, deriveAcc: deriveAcc, GetAllGoals: GetAllGoals, GetAllIdeas: GetAllIdeas, GetAllVotes: GetAllVotes, GetAllFeeds: GetAllFeeds,GetAllDonations:GetAllDonations,GetAllUserDonations:GetAllUserDonations, updateCurrentUser: updateCurrentUser, GetAllDaos: GetAllDaos, GetAllJoined: GetAllJoined, showToast: showToast, EasyToast: EasyToast, getUserInfoById: getUserInfoById, userWalletPolkadot: userWalletPolkadot, userSigner: userSigner, PolkadotLoggedIn: PolkadotLoggedIn, userInfo: userInfo }}>{children}</AppContext.Provider>;
 }
 
 export const usePolkadotContext = () => useContext(AppContext);

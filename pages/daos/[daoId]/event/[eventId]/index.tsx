@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { usePolkadotContext } from '../../../../../contexts/PolkadotContext';
+import { useUniqueVaraContext } from '../../../../../contexts/UniqueVaraContext';
 import DonateCoinToEventModal from '../../../../../features/DonateCoinToEventModal';
 import useContract from '../../../../../services/useContract';
 import useEnvironment from '../../../../../services/useEnvironment';
@@ -15,11 +16,13 @@ import { NFT } from '../../../../../data-model/nft';
 import NFTCard from '../../../../../components/components/NFTCard';
 import BidHistoryModal from '../../../../../features/BidHistoryModal';
 import PlaceHigherBidModal from '../../../../../features/PlaceHigherBidModal';
+import { Dao } from '../../../../../data-model/dao';
 
 export default function Events() {
   //Variables
-  const [list, setList] = useState([]);
-  const { api, getUserInfoById, GetAllVotes, GetAllDaos, GetAllEvents } = usePolkadotContext();
+  const [nfts, setNfts] = useState([]);
+  const { api, getUserInfoById, GetAllDaos } = usePolkadotContext();
+  const { GetAllNfts,GetAllEvents} = useUniqueVaraContext();
   const [eventIdTxt, setEventTxtID] = useState('');
   const { contract } = useContract();
   const [showCreateGoalModal, setShowDonateNFTModal] = useState(false);
@@ -28,7 +31,7 @@ export default function Events() {
   const [loading, setLoading] = useState(true);
   const [tabIndex, setTabIndex] = useState(0);
   
-  const [EventDAOURI, setEventDAOURI] = useState({} as Event);
+  const [EventDAOURI, setEventDAOURI] = useState({} as Dao);
   const [eventType, setEventType] = useState('polkadot');
   const [showBidHistoryModal, setShowBidHistoryModal] = useState<NFT | null>(null);
   const [showPlaceHigherBidModal, setShowPlaceHigherBidModal] = useState<NFT | null>(null);
@@ -52,6 +55,7 @@ export default function Events() {
     isOwner: true,
     status:""
   });
+
   const mockInfo = {
     title: 'Annual Food Drive',
     date: 'Annual Food Drive',
@@ -131,6 +135,11 @@ export default function Events() {
         let allEvents = await GetAllEvents();
         let eventURIFull = allEvents.filter((e) => e?.eventId == eventIdTxt.toString())[0];
 
+        let allNfts = await GetAllNfts();
+        let eventNFTs = allNfts.filter((e) => e.eventid == eventIdTxt.toString());
+
+        setNfts(eventNFTs);
+        
         let allDaos = await GetAllDaos();
         let eventDAO = allDaos.filter((e) => e.daoId == eventURIFull.daoId)[0];
         setEventDAOURI(eventDAO);
@@ -186,7 +195,7 @@ export default function Events() {
                 element={
                   <h5 className="font-semibold">
                     <Link className="text-piccolo" href={`../../${router.query.daoId}`}>
-                      {mockInfo.charity.title}
+                      {EventDAOURI?.Title}
                     </Link>{' '}
                     &gt; Event
                   </h5>
@@ -238,7 +247,7 @@ export default function Events() {
             <Tabs selectedIndex={tabIndex} onChange={setTabIndex}>
               <Tabs.List>
                 <Tabs.Tab>Description</Tabs.Tab>
-                <Tabs.Tab>NFT's on auction (4)</Tabs.Tab>
+                <Tabs.Tab>NFT's on auction ({nfts.length})</Tabs.Tab>
               </Tabs.List>
             </Tabs>
           </div>
@@ -246,12 +255,12 @@ export default function Events() {
         {tabIndex === 0 && (
           <div className="container mt-[-2rem] w-full flex gap-6">
             <div className="w-full max-w-[476px] h-[476px] overflow-hidden relative">
-              <Image unoptimized={true} objectFit="cover" layout="fill" className="rounded-xl object-cover" src={mockInfo.image} alt="" />
+              <Image unoptimized={true} objectFit="cover" layout="fill" className="rounded-xl object-cover" src={EventURI.logo} alt="" />
             </div>
             <div className="flex flex-col gap-5 bg-gohan rounded-xl w-full max-w-[300px] items-center p-6 pt-10 shadow-moon-lg">
               <GenericLoyalty className="text-hit text-moon-48" />
               <div className="font-bold text-moon-20">
-                Raised {getCurrency()} {mockInfo.eventRaised} of {mockInfo.eventTarget}
+                Raised {getCurrency()} {EventURI.reached} of {EventURI.Budget}
               </div>
               <div className="text-trunks text-center">NFT donations are put up for bidding at the event</div>
               <Button className="font-bold" onClick={distributeNFTs}>
@@ -265,15 +274,15 @@ export default function Events() {
         )}
         {tabIndex === 1 && (
           <div className="container mt-[-2rem] w-full flex flex-wrap gap-6">
-            {mockNFTs.map((item, i) => (
-              <NFTCard className="w-2/4" item={item} key={i} onShowBidHistory={() => setShowBidHistoryModal(item)} onShowPlaceHigherBid={() => setShowPlaceHigherBidModal(item)} />
+            {nfts.map((item, i) => (
+              <NFTCard className="w-2/4"  item={item} key={i} onShowBidHistory={() => setShowBidHistoryModal(item)} onShowPlaceHigherBid={() => setShowPlaceHigherBidModal(item)} />
             ))}
           </div>
         )}
       </div>
 
-      <DonateNFTModal open={showCreateGoalModal} onClose={closeDonateNFTModal} eventName={mockInfo.title} />
-      <DonateCoinToEventModal open={showDonateCoinModal} onClose={closeDonateCoinModal} eventName={mockInfo.title} />
+      <DonateNFTModal open={showCreateGoalModal} onClose={closeDonateNFTModal} eventid={eventIdTxt} eventName={EventURI.Title} />
+      <DonateCoinToEventModal open={showDonateCoinModal} onClose={closeDonateCoinModal} eventName={EventURI.Title} />
       <PlaceHigherBidModal open={!!showPlaceHigherBidModal} onClose={() => setShowPlaceHigherBidModal(null)} item={showPlaceHigherBidModal} />
       <BidHistoryModal open={!!showBidHistoryModal} onClose={() => setShowBidHistoryModal(null)} item={showBidHistoryModal} />
     </>

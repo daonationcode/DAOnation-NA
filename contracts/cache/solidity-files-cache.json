@@ -694,8 +694,8 @@
       ]
     },
     "D:\\code\\steve\\DAOnation-NA\\contracts\\contracts\\DAOAuction.sol": {
-      "lastModificationDate": 1716716538018,
-      "contentHash": "d06aba9c16d39b9f91ba49e56b4fb235",
+      "lastModificationDate": 1716761307993,
+      "contentHash": "8f78e80b752ca22c169a23de2ed80bb8",
       "sourceName": "contracts/DAOAuction.sol",
       "solcConfig": {
         "version": "0.8.17",
