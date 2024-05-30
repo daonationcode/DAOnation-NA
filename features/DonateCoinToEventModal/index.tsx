@@ -6,16 +6,17 @@ import useEnvironment from '../../services/useEnvironment';
 import { useUniqueVaraContext } from '../../contexts/UniqueVaraContext';
 import { usePolkadotContext } from '../../contexts/PolkadotContext';
 import { useUtilsContext } from '../../contexts/UtilsContext';
+import { toast } from 'react-toastify';
 
 declare let window;
-export default function DonateCoinToEventModal({ open, onClose, eventName }) {
+export default function DonateCoinToEventModal({ open, onClose, eventName, eventid, recieveWallet }) {
   const [Balance, setBalance] = useState("");
   const [BalanceAmount, setBalanceAmount] = useState(0);
   const [Coin, setCoin] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const {varaApi} = useUniqueVaraContext()
-  const {PolkadotLoggedIn,userWalletPolkadot,} = usePolkadotContext()
-  const {  switchNetworkByToken }: {  switchNetworkByToken: Function } = useUtilsContext();
+  const { varaApi } = useUniqueVaraContext()
+  const { PolkadotLoggedIn, userWalletPolkadot, } = usePolkadotContext()
+  const { switchNetworkByToken }: { switchNetworkByToken: Function } = useUtilsContext();
 
   const { getCurrency } = useEnvironment();
 
@@ -27,8 +28,41 @@ export default function DonateCoinToEventModal({ open, onClose, eventName }) {
     className: 'max-w-[140px]'
   });
 
-  async function DonateCoinSubmission() {
-    console.log('DONATE COIN');
+  async function DonateCoinSubmission(e) {
+    e.preventDefault();
+    console.clear();
+
+    const ToastId = toast.loading('Donating....');
+
+    setIsLoading(true);
+
+
+    let feed = JSON.stringify({
+      donated: Amount,
+      eventTitle: eventName,
+      eventid: eventid
+    });
+
+    async function onSuccess() {
+      window.location.reload();
+      LoadData();
+      setIsLoading(false);
+
+      onClose({ success: true });
+    }
+
+    toast.update(ToastId, { render: 'Sending Transaction...', isLoading: true });
+
+    let methodWithSignature = await window.contractUnique.populateTransaction.add_donation(eventid, `${Amount * 1e18}`, feed);
+    const tx = {
+      ...methodWithSignature,
+      value: `${Amount * 1e18}`,
+    }
+    await (await window.signer.sendTransaction(tx)).wait();
+
+    toast.update(ToastId, { render: 'Success!', isLoading: false, type: 'success' });
+
+    onSuccess();
   }
 
   async function LoadData(currencyChanged = false) {
@@ -36,16 +70,21 @@ export default function DonateCoinToEventModal({ open, onClose, eventName }) {
       if (Coin !== 'VARA') setCoin('VARA');
       const { nonce, data: balance } = await varaApi.query.system.account(userWalletPolkadot);
       setBalance((Number(balance.free.toString()) / 1e12).toString());
-      setBalanceAmount(Number(balance.free.toString())/ 1e12);
+      setBalanceAmount(Number(balance.free.toString()) / 1e12);
     }
 
     async function setMetamask() {
-      const Web3 = require('web3');
-      const web3 = new Web3(window.ethereum);
-      let Balance = await web3.eth.getBalance(window?.selectedAddress);
+      try {
 
-      setBalance((Balance / 1e18).toFixed(5));
-    
+        const Web3 = require('web3');
+        const web3 = new Web3(window.ethereum);
+        let Balance = await web3.eth.getBalance(window?.selectedAddress);
+
+        setBalance((Balance / 1e18).toFixed(5));
+        setBalanceAmount(Number(Balance) / 1e18);
+      } catch (error) {
+
+      }
     }
 
     if (PolkadotLoggedIn && currencyChanged == false && Coin == '') {
@@ -54,8 +93,7 @@ export default function DonateCoinToEventModal({ open, onClose, eventName }) {
       switchNetworkByToken("VARA")
       setPolkadotVara();
     } else if (currencyChanged == true && Coin !== 'VARA' && Coin !== '') {
-     
-      await window.ethereum.enable();
+      switchNetworkByToken("UNQ")
       setMetamask();
     }
   }
@@ -90,16 +128,25 @@ export default function DonateCoinToEventModal({ open, onClose, eventName }) {
                     <Dropdown.Options className="bg-gohan w-48 min-w-0">
                       <Dropdown.Option value="UNQ">
                         <MenuItem>UNQ</MenuItem>
-                      </Dropdown.Option>          
+                      </Dropdown.Option>
                       <Dropdown.Option value="VARA">
                         <MenuItem>VARA</MenuItem>
-                      </Dropdown.Option>  
-                  
+                      </Dropdown.Option>
+
                     </Dropdown.Options>
                   </Dropdown>
                 </div>
+                {
+                  Coin == "" ? <></> : <>
+                    {Number(BalanceAmount) - Amount < 1 ? <>
+                      <p className=" w-full text-right text-chichi">Insufficent Balance </p>
 
-                <p className="text-trunks w-full text-right">Your balance will be {Number(BalanceAmount) - Amount + ' ' + getCurrency()} </p>
+                    </> : <>
+                      <p className="text-trunks w-full text-right">Your balance will be {Number(BalanceAmount) - Amount + ' ' + Coin} </p>
+                    </>}
+                  </>
+                }
+
               </div>
 
               <div className="flex justify-between border-t border-beerus w-full p-6">

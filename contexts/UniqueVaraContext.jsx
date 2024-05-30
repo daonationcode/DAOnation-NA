@@ -4,18 +4,23 @@ import { createContext } from 'react';
 import { ApiPromise, WsProvider, Keyring } from '@polkadot/api';
 import varaConfig from './json/vara-config.json';
 
+import { GearApi,getProgramMetadata  } from '@gear-js/api';
+
+
 const AppContext = createContext({
   varaApi: null,
+  createEventInVara:async ()=>{},
   GetAllNfts: async () => [],
   GetAllEvents: async () => [],
   updateCurrentUser: () => {},
-  userWalletPolkadot:"",
-
+  userWalletVara:"",
+  VaraLoggedIn:false,
 });
 
 export function UniqueVaraProvider({ children }) {
   const [api, setApi] = useState();
-  const [userWalletPolkadot, setUserWalletPolkadot] = useState('');
+  const [userWalletVara, setUserWalletVara] = useState('');
+  const [VaraLoggedIn, setVaraLoggedIn] = useState(false);
   const [userSigner, setUserSigner] = useState('');
 
   
@@ -24,28 +29,40 @@ export function UniqueVaraProvider({ children }) {
     const { web3Enable, web3Accounts, web3FromAddress } = require('@polkadot/extension-dapp');
 
     await web3Enable('DAOnation');
-    // let wallet = (await web3Accounts())[0];
+    let wallet = (await web3Accounts())[0];
     // const injector = await web3FromAddress(wallet.address);
 
     // setUserSigner(injector.signer);
-
-    // setUserWalletPolkadot(wallet.address);
-    // window.signerAddress = wallet.address;
+    setVaraLoggedIn(true);
+    setUserWalletVara(wallet.address);
+    window.signerAddress = wallet.address;
   }
 
   useEffect(() => {
     (async function () {
       try {
-        const wsProvider = new WsProvider(varaConfig.chain_rpc);
-        const _api = await ApiPromise.create({ provider: wsProvider });
-        await _api.isReady;
+        const gearApi = await GearApi.create({
+          providerAddress: varaConfig.chain_rpc,
+        });
+        
+        await gearApi.isReady;
 
-        setApi(_api);
-        updateCurrentUser();        
+        setApi(gearApi);
+        if (window.localStorage.getItem('login-type') == 'polkadot-vara') {
+          updateCurrentUser();
+        }
         console.log('Vara Done');
       } catch (e) { }
     })();
   }, []);
+
+  async function createEventInVara(){
+    const programMetadata = getProgramMetadata('0xd101b04db8c7abce80d73c117085f868045cda75165d407219bdca756312590e');
+    const firstState =   await api.programState.read({ programId: '0xd101b04db8c7abce80d73c117085f868045cda75165d407219bdca756312590e' }, programMetadata);
+
+console.log(firstState);
+
+  }
 
   async function InsertEventData(totalEventCount, allEvents, prefix) {
     const arr = [];
@@ -53,24 +70,29 @@ export function UniqueVaraProvider({ children }) {
       let object = '';
       let daoId = "";
       let reached = 0;
+      let nft_raised  = 0;
+      let totalNfts = 0;
+      let eventId = prefix + i;
+      
       if (prefix == 'm_') {
         object = JSON.parse(allEvents[i].event_uri);
         daoId = allEvents[i].dao_id;
+         nft_raised = Number(await contractUnique.get_event_reached(i));
+         totalNfts = Number(await contractUnique.get_event_nft_count(i));
       } else {
         if (allEvents[i]?.eventUri) {
           object = JSON.parse(allEvents[i].eventUri?.toString());
           daoId = allEvents[i].daoId.toString();
         }
       }
-      reached = allEvents[i].raised;
-      let eventId = prefix + i;
-
-
+      reached =  Number(allEvents[i].raised)/1e18 + nft_raised/1e18 ;
+    
+      
       if (object) {
         arr.push({
           //Pushing all data into array
           id: i,
-          eventId: eventId,
+          eventId: i,
           daoId: daoId,
           Title: object.properties.Title.description,
           Description: object.properties.Description.description,
@@ -81,7 +103,8 @@ export function UniqueVaraProvider({ children }) {
           logo: object.properties.logo.description?.url,
           type: prefix == 'm_' ? 'Polkadot' : 'EVM',
           reached: reached,
-          amountOfNFTs:0,
+          amountOfNFTs:totalNfts,
+          status:allEvents[i].status
         });
       }
     }
@@ -116,6 +139,7 @@ export function UniqueVaraProvider({ children }) {
     //Fetching data from Smart contract
     try {
       if (window.contractUnique) {
+    
         const totalEventCount = Number(await contractUnique._event_ids());
         let totalEvent = async () => {
           const arr = [];
@@ -143,7 +167,7 @@ export function UniqueVaraProvider({ children }) {
 
 
 
-  async function InsertNftData(totalNftCount, allNfts, prefix) {
+  async function InsertNftData(totalNftCount, allNfts, prefix,allBids = []) {
     const arr = [];
     for (let i = 0; i < totalNftCount; i++) {
       let object = {};
@@ -152,6 +176,7 @@ export function UniqueVaraProvider({ children }) {
         object = allNfts[i];
       } 
       let nftId = prefix + i;
+      let allnftbids = allBids.filter((item)=>item.nftId == Number(i));
 
       arr.push({
         //Pushing all data into array
@@ -163,17 +188,18 @@ export function UniqueVaraProvider({ children }) {
         description: object.description,
         sender_wallet: object.sender_wallet,
         reciever_wallet: object.reciever_wallet,
-        highest_amount: object.highest_amount,
+        highest_amount: Number(object.highest_amount) /1e18,
         highest_bidder: object.highest_bidder,
+        highest_bidder_userid: object.highest_bidder_userid,
         type: prefix == 'm_' ? 'Polkadot' : 'EVM',
         highestBid: [],
-        bidHistory: [],
+        bidHistory:allnftbids,
       });
     }
     return arr;
   }
 
-  async function fetchContractNftData() {
+  async function fetchContractNftData(allBids) {
     //Fetching data from Smart contract
     try {
       if (window.contractUnique) {
@@ -186,7 +212,7 @@ export function UniqueVaraProvider({ children }) {
           }
           return arr;
         }
-        let arr = InsertNftData(totalNftCount, await totalNft(), 'm_');
+        let arr = InsertNftData(totalNftCount, await totalNft(), 'm_',allBids);
         return arr;
 
       }
@@ -196,14 +222,75 @@ export function UniqueVaraProvider({ children }) {
   }
 
   async function GetAllNfts() {
+    
+    let allBids =await  GetAllBids();
+    console.log(allBids);
     let arr = [];
     // arr = arr.concat(await fetchPolkadotGoalData());
-    arr = arr.concat(await fetchContractNftData());
+    arr = arr.concat(await fetchContractNftData(allBids));
     return arr;
   }
 
 
-  return <AppContext.Provider value={{varaApi:api,userWalletPolkadot:userWalletPolkadot, GetAllEvents:GetAllEvents,GetAllNfts: GetAllNfts,updateCurrentUser:updateCurrentUser}}>{children}</AppContext.Provider>;
+
+  
+
+  async function InsertBidData(totalBidCount, allBids, prefix) {
+    const arr = [];
+    for (let i = 0; i < totalBidCount; i++) {
+      let object = {};
+
+      if (prefix == 'm_') {
+        object = allBids[i];
+      } 
+      let bidId = prefix + i;
+
+      arr.push({
+        //Pushing all data into array
+        id: i,
+        bidId: bidId,
+        nftId: object.nft_id,
+        date: object.date,
+        walletAddress: object.walletAddress,
+        bidder: object.bidder,
+        bidder_userid:Number(object.bidder_userid),
+        bidAmount:Number(object.bidAmount)/1e18
+      });
+    }
+    return arr;
+  }
+
+  async function fetchContractBidData() {
+    //Fetching data from Smart contract
+    try {
+      if (window.contractUnique) {
+        const totalBidCount = Number(await contractUnique._bid_ids());
+        let totalBid = async () => {
+          const arr = [];
+          for (let i = 0; i < Number(totalBidCount); i++) {
+            const bid_info = await contractUnique._bid_uris(i);
+            arr.push(bid_info);
+          }
+          return arr;
+        }
+        let arr = InsertBidData(totalBidCount, await totalBid(), 'm_');
+        return arr;
+
+      }
+    } catch (error) { }
+
+    return [];
+  }
+
+  async function GetAllBids(){
+    let arr = [];
+    // arr = arr.concat(await fetchPolkadotGoalData());
+    arr = arr.concat(await fetchContractBidData());
+    return arr;
+  }
+
+
+  return <AppContext.Provider value={{varaApi:api,VaraLoggedIn:VaraLoggedIn,userWalletVara:userWalletVara,createEventInVara:createEventInVara, GetAllEvents:GetAllEvents,GetAllNfts: GetAllNfts,updateCurrentUser:updateCurrentUser}}>{children}</AppContext.Provider>;
 }
 
 export const useUniqueVaraContext = () => useContext(AppContext);

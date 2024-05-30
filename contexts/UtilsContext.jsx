@@ -127,6 +127,7 @@ export function UtilsProvider({ children }) {
       window.localStorage.setItem('login-type', 'polkadot-vara');
       return;
     }
+    
     if (token == "DOT"){
 
       const { web3Enable } = require('@polkadot/extension-dapp');

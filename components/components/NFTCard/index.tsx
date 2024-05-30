@@ -6,7 +6,7 @@ import { Button } from '@heathmont/moon-core-tw';
 import { ControlsPlus, TimeClock } from '@heathmont/moon-icons-tw';
 import { MouseEventHandler } from 'react';
 
-const NFTCard = ({ item, className, onShowBidHistory, onShowPlaceHigherBid, display = false }: { item: NFT; className?: string; onShowBidHistory?: MouseEventHandler; onShowPlaceHigherBid?: MouseEventHandler; display?: boolean }) => {
+const NFTCard = ({ item, eventStatus, className, onShowBidHistory, onShowPlaceHigherBid, display = false }: { item: NFT; eventStatus?:string; className?: string; onShowBidHistory?: MouseEventHandler; onShowPlaceHigherBid?: MouseEventHandler; display?: boolean }) => {
   const { getCurrency } = useEnvironment();
 
   return (
@@ -25,17 +25,19 @@ const NFTCard = ({ item, className, onShowBidHistory, onShowPlaceHigherBid, disp
             <p>
               Highest bid is{' '}
               <span className="font-bold">
-                {getCurrency()} {Number(item.highest_amount) / 1e18}
+                {getCurrency()} {Number(item.highest_amount) }
               </span>
             </p>
             <p>
-              by <span className="text-piccolo">{item.highest_bidder.substring(0,10)}...{item.highest_bidder.substring(item.highest_bidder.length - 10, item.highest_bidder.length)}</span>
+              by <span className="text-piccolo">{item.highest_bidder}</span>
             </p>
           </div>
           <div className="flex flex-col gap-2 w-full items-center">
-            <Button className="w-full max-w-[250px]" iconLeft={<ControlsPlus />} onClick={onShowPlaceHigherBid}>
+           {eventStatus !== "ended"?<>
+           <Button className="w-full max-w-[250px]" iconLeft={<ControlsPlus />} onClick={onShowPlaceHigherBid}>
               Place higher bid
             </Button>
+           </>:<></>} 
             <Button className="w-full max-w-[250px]" variant="secondary" iconLeft={<TimeClock />} onClick={onShowBidHistory}>
               View bid history
             </Button>

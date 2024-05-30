@@ -18,17 +18,21 @@ import CommunitySwitcher from '../../../features/CommunitySwitcher';
 import EventCard from '../../../components/components/EventCard';
 import CreateEventModal from '../../../features/CreateEventModal';
 import DonateCoinToEventModal from '../../../features/DonateCoinToEventModal';
+import { useUniqueVaraContext } from '../../../contexts/UniqueVaraContext';
+import DonateNFTModal from '../../../features/DonateNFTModal';
 
 export default function DAO() {
   const [goalsList, setGoalsList] = useState([]);
-  const { api, getUserInfoById, GetAllVotes, GetAllIdeas, GetAllJoined, GetAllGoals, GetAllEvents } = usePolkadotContext();
+  const { api, getUserInfoById, GetAllVotes, GetAllIdeas, GetAllJoined, GetAllGoals } = usePolkadotContext();
+  const { GetAllEvents} = useUniqueVaraContext();
   const [DaoURI, setDaoURI] = useState({ Title: '', Description: '', SubsPrice: null, Start_Date: '', End_Date: '', logo: '', wallet: '', typeimg: '', allFiles: [], isOwner: false, daoId: null, user_id: null, user_info: null } as Dao);
   const [daoIdTxt, setDaoTxtID] = useState('');
   const [daoId, setDaoID] = useState(-1);
   const { contract } = useContract();
   const [showCreateGoalModal, setShowCreateGoalModal] = useState(false);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
-  const [showDonateToEventModal, setShowDonateToEventModal] = useState<null | string>(null);
+  const [showDonateCoinModal, setShowDonateCoinModal] = useState(false);
+  const [showDonateNftModal, setShowDonateNFTModal] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [JoinedID, setJoinedID] = useState(9999);
@@ -39,6 +43,11 @@ export default function DAO() {
   const [daoType, setDaoType] = useState('polkadot');
   const [communityMembers, setCommunityMembers] = useState([]);
   const [AuctionEvents, setAuctionEvents] = useState([]);
+  const [SelectedEventName, setSelectedEventName] = useState("Event");
+  const [SelectedEventId, setSelectedEventId] = useState(0);
+  const [SelectedEventRecieveWallet, setSelectedEventReceiveWallet] = useState("");
+
+  
 
   const router = useRouter();
 
@@ -235,6 +244,23 @@ export default function DAO() {
   function openCreateEventModal() {
     setShowCreateEventModal(true);
   }
+  
+  function openDonateCoinModal(eventid,eventName,eventWallet) {
+    setSelectedEventId(eventid)
+    setSelectedEventName(eventName)
+    setSelectedEventReceiveWallet(eventWallet)
+
+    setShowDonateCoinModal(true);
+  }
+
+  function openDonateNFTModal(eventid,eventName,eventWallet) {
+    setSelectedEventId(eventid)
+    setSelectedEventName(eventName)
+    setSelectedEventReceiveWallet(eventWallet)
+    
+    setShowDonateNFTModal(true);
+  }
+
 
   return (
     <>
@@ -315,7 +341,7 @@ export default function DAO() {
         {tabIndex === 1 && <div className="template-container mt-[-2rem] w-full"></div>}
         {tabIndex === 2 && (
           <div className="flex flex-col gap-8 container items-center pb-10">
-            <Loader element={AuctionEvents.length > 0 ? AuctionEvents.map((event, index) => <EventCard item={event} key={index} onClickDonate={() => setShowDonateToEventModal(event.id)} />) : <EmptyState icon={<SportDarts className="text-moon-48" />} label="This charity doesn’t have any events yet." />} width={768} height={236} many={3} loading={false} />{' '}
+            <Loader element={AuctionEvents.length > 0 ? AuctionEvents.map((event, index) => <EventCard item={event} key={index} openDonateNFTModal={()=>openDonateNFTModal} openDonateCoinModal={()=>openDonateCoinModal} />) : <EmptyState icon={<SportDarts className="text-moon-48" />} label="This charity doesn’t have any events yet." />} width={768} height={236} many={3} loading={false} />{' '}
           </div>
         )}
         {tabIndex === 3 && (
@@ -332,7 +358,8 @@ export default function DAO() {
 
       <CreateGoalModal open={showCreateGoalModal} onClose={closeCreateGoalModal} daoId={daoIdTxt} />
       <CreateEventModal open={showCreateEventModal} onClose={closeCreateEventModal} daoId={daoIdTxt} />
-      <DonateCoinToEventModal open={!!showDonateToEventModal} onClose={() => setShowDonateToEventModal(null)} eventName="Event" />
+      <DonateCoinToEventModal open={!!showDonateCoinModal} onClose={() => setShowDonateCoinModal(null)} eventid={SelectedEventId}  eventName={SelectedEventName}  recieveWallet={SelectedEventRecieveWallet}/>
+      <DonateNFTModal open={!!showDonateNftModal} onClose={() => setShowDonateNFTModal(null)} eventid={SelectedEventId}  eventName={SelectedEventName} />
     </>
   );
 }

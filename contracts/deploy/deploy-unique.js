@@ -19,7 +19,7 @@ async function main() {
 		encoding: 'utf8',
 		flag: 'w'
 	  });
-	  print("Deployed Successful")
+	  console.log("Deployed Successful")
 	
 };
 
