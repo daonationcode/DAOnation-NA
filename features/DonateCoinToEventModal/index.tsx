@@ -14,7 +14,7 @@ export default function DonateCoinToEventModal({ open, onClose, eventName, event
   const [BalanceAmount, setBalanceAmount] = useState(0);
   const [Coin, setCoin] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { varaApi } = useUniqueVaraContext()
+  const { varaApi,VaraLoggedIn } = useUniqueVaraContext()
   const { PolkadotLoggedIn, userWalletPolkadot, } = usePolkadotContext()
   const { switchNetworkByToken }: { switchNetworkByToken: Function } = useUtilsContext();
 
@@ -87,7 +87,7 @@ export default function DonateCoinToEventModal({ open, onClose, eventName, event
       }
     }
 
-    if (PolkadotLoggedIn && currencyChanged == false && Coin == '') {
+    if (VaraLoggedIn && currencyChanged == false && Coin == '') {
       setPolkadotVara();
     } else if (currencyChanged == true && Coin == 'VARA') {
       switchNetworkByToken("VARA")

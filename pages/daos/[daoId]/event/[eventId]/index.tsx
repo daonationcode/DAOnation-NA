@@ -144,6 +144,8 @@ export default function Events() {
 
         let user_info = await getUserInfoById(Number(eventURIFull.UserId));
         eventURIFull.user_info = user_info;
+        eventURIFull.isOwner = eventURIFull.UserId == Number(window.userid);
+
 
         setEventURI(eventURIFull);
         setLoading(false);
@@ -276,6 +278,7 @@ export default function Events() {
               {EventURI.status == "ended" ? <>
                 <div className="text-chichi text-center">Auction Ended</div>
               </> : <>
+               {EventURI.isOwner?<>
                 <div className="text-trunks text-center">NFT donations are put up for bidding at the event</div>
                 <Button animation={isDistributing ? 'progress' : false} disabled={isDistributing} className="font-bold" onClick={distributeNFTs}>
                   Distribute NFTs to highest bidder
@@ -283,6 +286,7 @@ export default function Events() {
                 <div className="flex flex-1 flex-col justify-end text-center text-trunks text-moon-12">
                   99.9% of the proceeds go to the charity. <br /> Just 0.1% goes to DAOnation.
                 </div>
+               </>:<></>} 
               </>}
 
             </div>
