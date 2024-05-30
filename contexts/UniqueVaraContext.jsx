@@ -4,7 +4,7 @@ import { createContext } from 'react';
 import { ApiPromise, WsProvider, Keyring } from '@polkadot/api';
 import varaConfig from './json/vara-config.json';
 
-import { GearApi,getProgramMetadata  } from '@gear-js/api';
+import { GearApi,getStateMetadata,getProgramMetadata, ProgramMetadata, StateMetadata } from '@gear-js/api';
 
 
 const AppContext = createContext({
@@ -14,6 +14,7 @@ const AppContext = createContext({
   GetAllEvents: async () => [],
   updateCurrentUser: () => {},
   userWalletVara:"",
+  userSigner:null,
   VaraLoggedIn:false,
 });
 
@@ -30,9 +31,10 @@ export function UniqueVaraProvider({ children }) {
 
     await web3Enable('DAOnation');
     let wallet = (await web3Accounts())[0];
-    // const injector = await web3FromAddress(wallet.address);
+    const injector = await web3FromAddress(wallet.address);
 
-    // setUserSigner(injector.signer);
+    setUserSigner(injector.signer);
+
     setVaraLoggedIn(true);
     setUserWalletVara(wallet.address);
     window.signerAddress = wallet.address;
@@ -57,10 +59,15 @@ export function UniqueVaraProvider({ children }) {
   }, []);
 
   async function createEventInVara(){
-    const programMetadata = getProgramMetadata('0xd101b04db8c7abce80d73c117085f868045cda75165d407219bdca756312590e');
-    const firstState =   await api.programState.read({ programId: '0xd101b04db8c7abce80d73c117085f868045cda75165d407219bdca756312590e' }, programMetadata);
+    let recipient ='5FRkiMQneH7UF2scafNXFC85QAQ4HWSLxJpM6DVeH2FRfXHq';
+    const txs = [api.tx.balances.transferAllowDeath(recipient, `${4 * 1e12}`)];
 
-console.log(firstState);
+    const transfer = await api.tx.utility.batch(txs).signAndSend(userWalletVara, { signer: userSigner }, (status) => {
+      showToast(status, id, 'Sent successfully!', () => {
+
+      });
+    });
+console.log(transfer);
 
   }
 
@@ -290,7 +297,7 @@ console.log(firstState);
   }
 
 
-  return <AppContext.Provider value={{varaApi:api,VaraLoggedIn:VaraLoggedIn,userWalletVara:userWalletVara,createEventInVara:createEventInVara, GetAllEvents:GetAllEvents,GetAllNfts: GetAllNfts,updateCurrentUser:updateCurrentUser}}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{varaApi:api,VaraLoggedIn:VaraLoggedIn,userWalletVara:userWalletVara,createEventInVara:createEventInVara,userSigner:userSigner, GetAllEvents:GetAllEvents,GetAllNfts: GetAllNfts,updateCurrentUser:updateCurrentUser}}>{children}</AppContext.Provider>;
 }
 
 export const useUniqueVaraContext = () => useContext(AppContext);
